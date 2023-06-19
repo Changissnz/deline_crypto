@@ -95,9 +95,9 @@ public:
         m1 = pts_.first(0) - pts_.second(0);
         m2 = pts_.first(1) - pts_.second(1);
         if (m2 == 0.) {
-            m =std::numeric_limits<float>::infinity();
+            m = std::numeric_limits<float>::infinity();
         } else {
-            m = m1/ m2;
+            m = m2/ m1;
         }
 
         b = pts_.first(1) - pts_.first(0) * m;

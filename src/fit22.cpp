@@ -108,7 +108,7 @@ float LineFit::YFit(float y) {
 
 /// TODO: wrong
 rowvec LineFit::PointByAxialRatio(float r) {
-
+    
     if (m == numeric_limits<float>::infinity()) {
         return {pts.first(0), pts.first(1) + r * (pts.second(1) - pts.first(1))};
     }
@@ -118,6 +118,6 @@ rowvec LineFit::PointByAxialRatio(float r) {
     }
 
     // get the difference in x-distance
-    float d = (pts.second(0) - pts.first(0)) * r;
-    return {d,m * (pts.first(0) + d) + b};
+    float x = pts.first(0) + (pts.second(0) - pts.first(0)) * r;
+    return {x,x * m + b};
 }
