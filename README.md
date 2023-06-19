@@ -22,4 +22,5 @@ project at
 - type in `python3 -i gen_t.py`.
 - type in `gen_t4()` for `t4.csv`.
 - type in `gen_t5()` for `t5.csv`.
-- transfer those two files to the folder `deline_crypto/data`.
+- transfer those two files to the folder
+    `deline_crypto/src/data`.
