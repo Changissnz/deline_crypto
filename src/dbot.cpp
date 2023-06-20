@@ -4,7 +4,8 @@
 void DBot::LoadFiles() {
     LoadDMDT();
     LoadIKey();
-    LoadRKey(); 
+    LoadRKey();
+    LoadUTGS(); 
 }
 
 /// loads a <DMDTraveller> instance from the dataset `drd`
@@ -84,6 +85,63 @@ void DBot::LoadRKey() {
     }
 }
 
+void DBot::LoadUTGS() {
+    AbstractPRNG* aprng = APRNGFromString(utgfp.second.first);
+    UTGraph* utg;
+    if (utgfp.first) {
+        UTGraph utg1 = UTGraph::FromFile(utgfp.second.second);
+        utg = &utg1;
+    } else {
+        vector<string> vs = SplitStringToVector(utgfp.second.second,"_");
+        assert(vs.size() == 3);
+
+        vector<string> vs2 = SplitStringToVector(vs[0]," ");
+        assert(vs2.size() == 2);
+        pair<int,int> dr = make_pair(stoi(vs2[0]),stoi(vs2[1]));
+
+        AbstractPRNG* aprng2 = APRNGFromString(utgfp.second.second);
+
+        vector<string> vs3 = SplitStringToVector(vs[2], " ");
+        assert(vs3.size() == 5);
+        PermLCG* plcg = new PermLCG(stoi(vs3[0]),stoi(vs3[1]),stoi(vs3[2]),
+            stoi(vs3[3]),stof(vs3[4]));
+
+        UTGraphGen ugg = UTGraphGen(cs,dr,aprng2,plcg);
+        ugg.LoadUTGraph();
+        utg = ugg.utg; 
+    }
+        assert(CheckGraph(utg));
+
+    utgs = new UTGSwapper(utg,aprng,false);
+}
+
+bool DBot::CheckGraph(UTGraph* utg) {
+    // check uniqueness of charset
+    set<string> scs(cs.begin(),cs.end());
+
+    if (!(scs.size() == cs.size())) {
+        return false; 
+    }
+
+    // iterate through the nodes of utg
+    set<string> ns;
+    set<string> ts;
+    for (auto n_: utg->nodes) {
+        ns.insert((n_.second)->c);
+        ts.insert((n_.second)->iidt);
+    }
+
+    if (scs != ns) {
+        return false;
+    }
+
+    if (scs != ts) {
+        return false;
+    }
+
+    return true;
+};
+
 DInstSeq* DBot::LoadOneCommand(bool is_ik) {
     DataReader* drx = is_ik ? dri : drr; 
     
@@ -108,11 +166,3 @@ mat DBot::OneChar(string c) {
     mat m = mat(0,0,fill::zeros);
     return m;
 }
-
-
-
-// declares the DMDTraveller
-/*
-void DBot::Preprocess() {  
-}
-*/

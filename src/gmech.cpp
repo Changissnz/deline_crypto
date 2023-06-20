@@ -132,7 +132,7 @@ void UTGraph::WriteToFile(string fp) {
     TravelToBaseDir();
 
     ofstream fx;
-    fx.open(fp,ofstream::app); 
+    fx.open(fp,ofstream::trunc);// ofstream::app); 
     
 
     for (auto c: nodes) {
