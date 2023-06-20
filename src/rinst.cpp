@@ -95,3 +95,36 @@ void RInst::Parse_() {
     i += 1;
     reaction_targets = SplitStringToVector(inf[i],",");
 }
+
+
+DInstSeq* RInst::React(DMDTraveller* dmdt,DInstSeq* dis, UTGSwapper* utgs,string chrcter) {
+    bool stat = false;
+
+    // case: check FOR character condition
+    if (c1 == "FOR") {
+        stat = (c2 == chrcter);
+    }
+
+        // no reaction 
+    if (!stat) {
+        return dis;
+    }
+
+    // check ckonditional
+    string cid = (c1 == "FOR") ? c3 : c2;
+    bool rc = RCONDITIONAL(dmdt,dis,cid,cond_args);
+
+        // no reaction
+    if (!rc) {
+        return dis;
+    }
+
+    // case: reaction
+
+    DInstSeq* dis2 = dis;
+
+    return dis2;
+
+}
+
+/// TODO: work on reactions.cpp commands next. 

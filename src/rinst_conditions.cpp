@@ -146,23 +146,6 @@ ivec C3__POINTSEQ_INTERSECTS_W_PREVIOUS_SPAN_(DMDTraveller* dmdt,DInstSeq* di) {
 
     // get the previous point-sequence of equal length to pseq
     mat m2 = PreviousSequence(dmdt,pseq.n_rows);
-    /*
-    int e = (dmdt->travel_points).n_rows - 1 - pseq.n_rows;
-    
-    // case: no previous points
-    if (e == -1) {
-        ivec iv = {0};
-        return iv; 
-    }
-
-    int s = e - pseq.n_rows;
-    if (s < 0) {
-        s = 0;
-    }
-
-    mat m2 = IndiceRangeToSubArmaMat(dmdt->travel_points,make_pair(s,e));
-    */
-
 
     double min1 = m2.col(0).min();
     double max1 = m2.col(0).max();
@@ -313,4 +296,24 @@ bool C6__BOOLEAN_DELTA_MEASURE_ALONG_AXIS(DMDTraveller* dmdt,DInstSeq* di,string
 ivec C6__BOOLEAN_DELTA_MEASURE_ALONG_AXIS(DMDTraveller* dmdt,DInstSeq* di,char direction) {
     mat pseq = (di->MOsequence(dmdt)).first;
     return JaggedEdges(pseq,direction); 
+}
+
+bool RCONDITIONAL(DMDTraveller* dmdt, DInstSeq* di,string conditional_id, string desc) {
+
+    assert(possible_conds.find(conditional_id) != possible_conds.end());
+
+    if (conditional_id == "C1") {
+        return C1__IN_BOUNDS_OF_DELINEATION(dmdt,di,desc);
+    } else if (conditional_id == "C2") {
+        return C2__ARITHMETICSEQ_IN_MOD_RANGE(dmdt,di,desc);
+    } else if (conditional_id == "C3") {
+        return C3__POINTSEQ_INTERSECTS_W_PREVIOUS_SPAN(dmdt,di,desc);
+    } else if (conditional_id == "C4") {
+        return C4__POINTSEQ_MULTICLASS_MEASURE(dmdt,di,desc);
+    } else if (conditional_id == "C5") {
+        return C5__SEQUENTIAL_EUCLIDEAN_DISTANCE_MEASURE(dmdt,di,desc);
+    } else {
+        return C6__BOOLEAN_DELTA_MEASURE_ALONG_AXIS(dmdt,di,desc);
+    }
+
 }

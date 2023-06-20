@@ -4,6 +4,10 @@
 #include "dmd_traveller.hpp" 
 #include "dinst.hpp"
 
+static std::set<std::string> possible_c1 = {"ANYTIME", "FOR"};
+static std::set<std::string> possible_conds = {"C1","C2","C3","C4",
+                        "C5","C6"};
+                        
 bool C1__IN_BOUNDS_OF_DELINEATION(DMDTraveller* dmdt,DInstSeq* di,std::string desc);
 ivec C1__IN_BOUNDS_OF_DELINEATION_(DMDTraveller* dmdt,DInstSeq* di);
 
@@ -23,5 +27,7 @@ bool C6__BOOLEAN_DELTA_MEASURE_ALONG_AXIS(DMDTraveller* dmdt,DInstSeq* di,std::s
 ivec C6__BOOLEAN_DELTA_MEASURE_ALONG_AXIS(DMDTraveller* dmdt,DInstSeq* di, char direction);
 
 mat PreviousSequence(DMDTraveller* dmdt,int l);
+
+bool RCONDITIONAL(DMDTraveller* dmdt, DInstSeq* di,std::string conditional,std::string desc);
 
 #endif

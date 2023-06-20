@@ -230,7 +230,7 @@ float EuclideanDistance(rowvec p, rowvec p2) {
 int MinPointByEuclideanDistance(mat m, rowvec p) {
 
   int j = -1;
-  float ds = numeric_limits<float>::infinity();
+  float ds = numeric_limits<float>::max();
   float ds2;
   for (int i = 0; i < m.n_rows; i++) {
     ds2 = EuclideanDistance(m.row(i), p);

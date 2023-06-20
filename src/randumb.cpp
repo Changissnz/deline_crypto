@@ -149,7 +149,7 @@ vector<float> LCG::CycleOne(bool floatgen,int max_size) {
 void LCG2H::SetFirst(pair<int,float> vp, bool floatgen) {
     
     if (floatgen) {
-        if (ff != numeric_limits<float>::infinity()) {
+        if (ff != numeric_limits<float>::max()) {
             return;
         } 
 
@@ -342,7 +342,7 @@ int PermLCG::ClosestInt(int i) {
 float PermLCG::ClosestFloat(float i) {
 
     float j = -1.;
-    float d = numeric_limits<float>::infinity();
+    float d = numeric_limits<float>::max();
 
     for (set<float>::iterator it=s2.begin(); it!=s2.end(); it++) {
         if (abs(*it - i) < d) {

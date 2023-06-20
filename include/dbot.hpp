@@ -54,7 +54,7 @@ public:
     void LoadIKey();
     void LoadRKey();
     DInstSeq* LoadOneCommand(bool is_ik);
-    mat DoOneChar(char c);
+    mat OneChar(std::string c);
 };
 
 #endif

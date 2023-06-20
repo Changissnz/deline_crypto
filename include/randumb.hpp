@@ -110,7 +110,7 @@ public:
         l2 = new LCG(r2(0),r2(1),r2(2),r2(3));
         this->l = l; 
         fi = std::numeric_limits<int>::infinity();
-        ff = std::numeric_limits<float>::infinity();
+        ff = std::numeric_limits<float>::max();
     }
     void SetFirst(std::pair<int,float> vp, bool floatgen);
 

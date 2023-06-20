@@ -87,6 +87,7 @@ void DBot::LoadRKey() {
 DInstSeq* DBot::LoadOneCommand(bool is_ik) {
     DataReader* drx = is_ik ? dri : drr; 
     
+    // collect the information. 
     string s;
     vector<string> vs;
     while (!drx->finished) {
@@ -103,7 +104,7 @@ DInstSeq* DBot::LoadOneCommand(bool is_ik) {
     return dis; 
 }
 
-mat DBot::DoOneChar(char c) {
+mat DBot::OneChar(string c) {
     mat m = mat(0,0,fill::zeros);
     return m;
 }

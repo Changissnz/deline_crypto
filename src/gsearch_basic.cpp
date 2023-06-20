@@ -240,7 +240,7 @@ float GInfo::Diameter() {
 set<string> GInfo::Center() {
     auto eccs = Eccentricities();
     set<string> nodeset;
-    float score = numeric_limits<float>::infinity();
+    float score = numeric_limits<float>::max();
 
     for (auto c: eccs) {
         if (c.second < score) {
@@ -350,7 +350,7 @@ float GInfo::AverageDistanceToNodeset(set<string> ns,string rn) {
 
     for (auto ns_: ns) {
         if (ssmb.find(ns_) == ssmb.end()) {
-            vf.push_back(numeric_limits<float>::infinity());
+            vf.push_back(numeric_limits<float>::max());
         } else {
             vf.push_back(ssmb[ns_][0].distance);
         }
@@ -359,7 +359,7 @@ float GInfo::AverageDistanceToNodeset(set<string> ns,string rn) {
     vec vfv = conv_to<vec>::from(vf);
     
     if (vfv.size() == 0) {
-        return numeric_limits<float>::infinity();
+        return numeric_limits<float>::max();
     }
 
     return float(accu(vfv)) / vfv.size();
@@ -368,14 +368,14 @@ float GInfo::AverageDistanceToNodeset(set<string> ns,string rn) {
 /// TODO: check this. 
 float GInfo::N2NDistance(string n1,string n2) {
     if (nbp.find(n1) == nbp.end() || nbp.find(n2) == nbp.end()) {
-        return numeric_limits<float>::infinity();
+        return numeric_limits<float>::max();
     }
 
     /// CORRECTION: 
     /*
     auto sp = nbp[n1]->ShortestPaths();
     if (sp.find(n2) == sp.end()) {
-        return numeric_limits<float>::infinity();
+        return numeric_limits<float>::max();
     }
     return sp[n2]->distance;
     */
@@ -385,13 +385,13 @@ float GInfo::N2NDistance(string n1,string n2) {
     auto sp2 = nbp[n2]->ShortestPaths();
     vec iv = {0,0};
     if (sp.find(n2) == sp.end()) {
-        iv(0) = numeric_limits<float>::infinity();
+        iv(0) = numeric_limits<float>::max();
     } else {
         iv(0) = sp[n2]->distance;
     }
 
     if (sp2.find(n1) == sp2.end()) {
-        iv(1) = numeric_limits<float>::infinity();
+        iv(1) = numeric_limits<float>::max();
     } else {
         iv(1) = sp2[n1]->distance;
     }

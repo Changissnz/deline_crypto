@@ -144,7 +144,6 @@ public:
     /// used to avoid repeat-swaps 
     std::string pnrs; 
 
-
     /// utg := `UTGraph` of interest
     /// utcg := `UTComponentGraph` corresponding to utg
     /// gi := `GInfo` corresponding to utg
@@ -213,6 +212,10 @@ public:
     bool component_remainder_stat;
     bool type_route_stat;
 
+    // bool is reset to True if UTGSwapper is required to
+    // call `PreloadInitialRunTypeRoute` 
+    bool modeia_reset;
+
     // used for SwapCommand 
     std::string target_node_cs; // target node for command swap
 
@@ -226,6 +229,7 @@ public:
         ugm = nullptr;
         type_route_stat = false;
         target_node_cs = "NULLAXI";
+        modeia_reset = true;
     }
 
     void Preprocess();
@@ -235,22 +239,18 @@ public:
 
     void ComponentAnalysis();
     void InitialRunTypeRoute();
-    void FindBestSolutionTypeRoute();
 
     /// methods used for "CommandSwap"
     void PreloadInitialRunTypeRoute();
+    void ModeiaReset();
     void SwapOneTypeRoute();
     void InitSwapOneTypeRoute();
     bool SwapOneTypeRouteRemainder();
     void LoadComponentRemainderInfo(std::string cmpnt);
     void SwapOneTypeObj(bool obj_best, AbstractPRNG* aprng,int iterations);
     void SwapOneTypeTargetNodeRoute(AbstractPRNG* aprng,int iterations);
-
     void CommandSwap(std::string command);
 
-    // permutation run
-    void PRunTypeRoute();
-    void RewindNSwaps();
 };
 
 

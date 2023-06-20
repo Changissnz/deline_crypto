@@ -360,21 +360,6 @@ DInst* SELECTDINST(DInstSeq* di, AbstractPRNG* aprng) {
     return dx;
 }
 
-///////////////////////////////////////////////////////////////
-
-/// * form 1:
-/// "swap_utg",...swap instructions...
-///
-/// * form 2:
-/// ...modify instruction by a complementary pattern...
-///
-// DInstSeq* RTMODINSTR(DMDTraveller* dmdt, UTGSwapper* utgs, DInst* di, std::vector<std::string> vs);
-
-/// alters the delineation environment. 
-/// * AlterDeline22
-/// * JitterDeline22
-//DInstSeq* RTMODDENV(DMDTraveller* dmdt, UTGSwapper* utgs, std::vector<std::string> vs);
-
-
-////////////////////////////////////////////////////////////////////////////////////
-
+void RTMODUTG(UTGSwapper* utgs,string command) {
+    utgs->CommandSwap(command);
+}

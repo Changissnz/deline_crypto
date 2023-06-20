@@ -126,19 +126,6 @@ UTGraph UTGraphSwapCase3() {
     return utg1;
 }
 
-/// TODO: 
-/// intermittently check w/ Valgrind. 
 int main(int argc, char **argv) {
-
-    float mx = numeric_limits<float>::infinity();
-
-    cout << "equals: " << (mx == (numeric_limits<float>::infinity())) << endl;
-
-    rowvec r1 = {0.,14.};
-    rowvec r2 = {40.,94.};
-    LineFit lf = LineFit(make_pair(r1,r2));
-
-    cout << "RATIO 2: " << lf.PointByAxialRatio(2.0) << endl;
-
     return 1;
 }

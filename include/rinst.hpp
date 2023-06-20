@@ -5,9 +5,6 @@
 #include "rinst_conditions.hpp"
 
 //#include <vector>
-std::set<std::string> possible_c1 = {"ANYTIME", "FOR"};
-std::set<std::string> possible_conds = {"C1","C2","C3","C4",
-                        "C5","C6","C7","C8"};
 
 class RInst {
 public:
@@ -35,7 +32,10 @@ public:
     void Parse();
     void Parse_();
 
-    DInstSeq* React(DInstSeq* dis);
+    DInstSeq* React(DMDTraveller* dmdt,DInstSeq* dis, UTGSwapper* utgs,string chrcter); 
+
+    void ActivateReaction();
+    std::vector<DInstSeq*> FetchReactionTargets();
 };
 
 #endif

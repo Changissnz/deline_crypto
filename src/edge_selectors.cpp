@@ -22,7 +22,7 @@ int index_of_next_point_in_direction(mat PS,rowvec p, char direction,int startIn
     int axis = DirectionToAxis(direction);
 
     // get the indices of the closest point in PS
-    float f1 = numeric_limits<float>::infinity();
+    float f1 = numeric_limits<float>::max();
     vector<int> indices;
     mat PS2(PS.n_rows,PS.n_cols,fill::zeros);
     int active_rows = 0;

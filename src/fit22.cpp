@@ -87,7 +87,7 @@ float SquareFit22::YFit(float y) {
 
 float LineFit::Fit(float x) {
     x = RoundDecimalNPlaces(x,5);
-    if (m != numeric_limits<float>::infinity()) {
+    if (m != numeric_limits<float>::max()) {
         return RoundDecimalNPlaces(m * x + b,5);
     }
     return pts.first(1);
@@ -99,25 +99,25 @@ float LineFit::YFit(float y) {
         return pts.first(0);
     }
 
-    if (m != numeric_limits<float>::infinity()) {
+    if (m != numeric_limits<float>::max()) {
         return RoundDecimalNPlaces((y - b) / m,5);
     }
     
     return pts.first(0);
 }
 
-/// TODO: wrong
 rowvec LineFit::PointByAxialRatio(float r) {
     
-    if (m == numeric_limits<float>::infinity()) {
-        return {pts.first(0), pts.first(1) + r * (pts.second(1) - pts.first(1))};
-    }
-
     if (m == 0.) {
         return {pts.first(0) + r * (pts.second(0) - pts.first(0)),pts.first(1)};        
     }
 
     // get the difference in x-distance
     float x = pts.first(0) + (pts.second(0) - pts.first(0)) * r;
-    return {x,x * m + b};
+    rowvec rx = {x,x * m + b};
+
+    if (isnan(rx(1))) {
+        return {pts.first(0), pts.first(1) + r * (pts.second(1) - pts.first(1))};
+    }
+    return rx;
 }

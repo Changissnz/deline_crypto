@@ -17,7 +17,7 @@ float ComponentToCenterMeanDistance(UTComponentGraph* utcg, GInfo* gi, string ci
     }
 
     if (c == 0) {
-        return numeric_limits<float>::infinity();
+        return numeric_limits<float>::max();
     } 
     
     return f / float(c);
@@ -35,7 +35,7 @@ float NodeToCenterMeanDistance(UTGraph* utg,GInfo* gi, string nid) {
     }
 
     if (sc.size() == 0) {
-        return numeric_limits<float>::infinity();
+        return numeric_limits<float>::max();
     }
 
     return s / float(sc.size());
@@ -725,9 +725,19 @@ void UTGSwapper::PreloadInitialRunTypeRoute() {
     usi->CompOrder();
 }
 
+void UTGSwapper::ModeiaReset() {
+    if (modeia_reset) {
+        PreloadInitialRunTypeRoute();
+        type_route_index = make_pair(-1,make_pair(0,0));
+        modeia_reset = false;
+        type_route_stat = false;
+    }
+}
+
 /// TODO: test
 void UTGSwapper::SwapOneTypeRoute() {
     
+
     // case: complete
     if (type_route_stat) {
         return;
@@ -850,6 +860,8 @@ void UTGSwapper::LoadComponentRemainderInfo(string cmpnt) {
 /// NOTE: inefficiency by sorting nodes by token distances for every call. 
 /// OPTIONAL: add code to have `usi` use `aprng` instead of its own.
 void UTGSwapper::SwapOneTypeObj(bool obj_best, AbstractPRNG* aprng,int iterations) {
+    // set `modeia_reset` to True
+    modeia_reset = true;
 
     // rank the nodes 
     set<string> components = (usi->utcg)->ComponentSet();
@@ -870,6 +882,8 @@ void UTGSwapper::SwapOneTypeObj(bool obj_best, AbstractPRNG* aprng,int iteration
 
 /// CAUTION: recursive, 
 void UTGSwapper::SwapOneTypeTargetNodeRoute(AbstractPRNG* aprng, int iterations) {
+
+    modeia_reset = true;
 
     if (iterations == 0) {
         return;
@@ -944,31 +958,5 @@ void UTGSwapper::CommandSwap(string command) {
         // declare the
         SwapOneTypeTargetNodeRoute(aprng,iterations);
     }
-
-
 }
 
-/// TODO: incomplete!
-/// BRIEF:
-/// method builds up on `UTGSwapper::InitialRunTypeRoute` to
-/// modify GPaths to produce a solve-swap sequence for the graph
-/// with minimal distraction swaps.
-///
-/// DISCLAIMER:
-/// method is not guaranteed to find the best solution for an
-/// arbitrary graph.
-void UTGSwapper::FindBestSolutionTypeRoute() {
-    /// reset the swap-history
-    usi = new UTGSwapInstruction(utg,utcg,gi,aprng,record,false);
-    usi->CompOrder();
-    auto cov = usi->component_order;
-    for (auto co: cov) {
-        usi->AnalyzeNodeRoutesOfComponent(co.first); 
-
-        // determine the distraction swaps of interest
-
-        // correct for those distraction swaps
-        // by reverting back the appropriate number of
-        // swaps and using alternative GPaths.   
-    }
-}

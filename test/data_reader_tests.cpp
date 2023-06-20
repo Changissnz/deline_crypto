@@ -4,8 +4,8 @@ using namespace std;
 
 TEST(DataReader_ReadNextChar__Case1_Test, DataReader_ReadNextChar__Case1_Test_Correct) {
     DataReader dr = DataReader("yoquistas.txt",20);
-    char* x = dr.ReadNextChar(3);
-    //assert (string(x) == string("Thi"));
+    string x = string(dr.ReadNextChar(3));
+    assert (x == "Thi");
     //assert(!string(x).compare("Thi"));
 
     char* x2 = dr.ReadNextChar(4);
