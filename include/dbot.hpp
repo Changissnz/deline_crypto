@@ -4,16 +4,25 @@
 
 #include "rinst.hpp"
 #include "gen_struct.hpp"
-//#include "dinst.hpp"
-//#include "data_reader.hpp"
-//#include "instruction_key.hpp"
-//#include <string>
-
 
 // possible deineation schemes
 static std::set<std::string> possible_dschemes = {"nodup","nocross","nojag"};
 
-///AbstractPRNG* APRNGFromString(std::string s);
+
+class Reactor {
+
+    std::vector<RInst*> anytimer;
+    std::vector<RInst*> forr;
+
+public:
+    Reactor(std::vector<RInst*> ri) {
+        LoadInst(ri);
+    }
+
+    void LoadInst(std::vector<RInst*> ri);
+
+};
+
 
 /// delineation bot
 class DBot {
@@ -32,7 +41,7 @@ public:
     std::pair<bool,std::pair<std::string,std::string>> utgfp;
     std::vector<std::string> cs;
     std::map<std::string,DInstSeq*> mcd; 
-    std::vector<DInstSeq*> rk;
+    Reactor* reactor;
 
     // reader for the instruction keys
     DataReader* dri;
@@ -65,7 +74,7 @@ public:
     void LoadRKey();
     void LoadUTGS();
     bool CheckGraph(UTGraph* utg);
-    DInstSeq* LoadOneCommand(bool is_ik);
+    std::pair<DInstSeq*,RInst*> LoadOneCommand(bool is_ik);
     std::pair<mat,int> OneChar(std::string c);
 };
 

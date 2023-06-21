@@ -70,7 +70,7 @@ void DBot::LoadDMDT() {
 void DBot::LoadIKey() {
     int i = 0;
     while (!dri->finished && i < cs.size()) {
-        mcd[cs[i]] = LoadOneCommand(true);
+        mcd[cs[i]] = LoadOneCommand(true).first;
         i += 1;
     }
 }
@@ -80,9 +80,12 @@ void DBot::LoadRKey() {
         return;
     }
 
+    vector<RInst*> rk; 
     while (!drr->finished) {
-        rk.push_back(LoadOneCommand(false));
+        rk.push_back(LoadOneCommand(false).second);
     }
+
+    reactor = new Reactor(rk);
 }
 
 void DBot::LoadUTGS() {
@@ -142,7 +145,7 @@ bool DBot::CheckGraph(UTGraph* utg) {
     return true;
 };
 
-DInstSeq* DBot::LoadOneCommand(bool is_ik) {
+pair<DInstSeq*,RInst*> DBot::LoadOneCommand(bool is_ik) {
     DataReader* drx = is_ik ? dri : drr; 
     
     // collect the information. 
@@ -157,9 +160,14 @@ DInstSeq* DBot::LoadOneCommand(bool is_ik) {
         vs.push_back(s); 
     }
 
-    DInstSeq* dis = new DInstSeq(vs);
-    dis->ParseIntoDInst();
-    return dis; 
+    if (is_ik) {
+        DInstSeq* dis = new DInstSeq(vs);
+        dis->ParseIntoDInst();
+        return make_pair(dis,nullptr); 
+    }
+
+    RInst* ris = new RInst(vs);
+    return make_pair(nullptr,ris);
 }
 
 /// - return:
@@ -167,4 +175,23 @@ DInstSeq* DBot::LoadOneCommand(bool is_ik) {
 pair<mat,int> DBot::OneChar(string c) {
     mat m = mat(0,0,fill::zeros);
     return make_pair(m,0);
+}
+
+////////////////////////////////////
+
+void Reactor::LoadInst(vector<RInst*> ri) {
+
+    while (ri.size() > 0) {
+
+        if (ri[0]->c1 == "ANYTIME") {
+            anytimer.push_back(ri[0]);
+        } else if (ri[0]->c1 == "FOR") {
+            forr.push_back(ri[0]);
+        } else {
+            assert(1 == 0); 
+        }
+
+        ri.erase(ri.begin() + 0);
+    }
+
 }
