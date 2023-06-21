@@ -20,6 +20,8 @@ public:
     //std::pair<std::pair<int,int>,std::vector<int>> dmddim;
     std::pair<int,std::map<int,int>> dmddim;
     std::vector<std::string> ck;
+    // used for unique selection
+    std::vector<std::string> ck2;
 
     std::vector<std::vector<std::string>> ckey_genrd;
     std::vector<std::vector<std::string>> rkey_genrd;
@@ -34,7 +36,7 @@ public:
     ///           [1] number of Deline22's for each DelineMD
     KeyGen(AbstractPRNG* rg1, AbstractPRNG* rg2,
         std::string f1, std::string f2, std::pair<int,std::map<int,int>> dmddim,
-        std::vector<std::string> char_keys=STD_NODE_LIST) {
+        std::vector<std::string> char_keys=STD_NODE_LIST,int num_reactions = STD_NODE_LIST.size()) {
         //int cl) {
         this->rg1 = rg1;
         this->rg2 = rg2;
@@ -42,6 +44,7 @@ public:
         this->f2 = f2;
         this->dmddim = dmddim;
         this->ck = char_keys;
+        this->ck2 = char_keys;
         erroneous = false;
     }
 
@@ -58,6 +61,9 @@ public:
     void OutOneRKeyBasic();
     void OutANYTIME();
     void OutFOR();
+    std::string OutCONDITION();
+    std::vector<std::string> OutTAKEREACTIONAS();
+    std::string OutUTGSCommandSwap();
 
     void WriteToFile();
 };

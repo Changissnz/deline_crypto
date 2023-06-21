@@ -244,13 +244,134 @@ void KeyGen::OutOneRKeyBasic() {
 
 }
 
+/// * see comments at <RInst::Parse_> for format*
+/// The number of character targets for reaction 
+/// MODINSTR is in the range [1,6].  
 void KeyGen::OutANYTIME() {
+    int i;
+    
+    // choose a character from `ck`.
+    vector<string> vs = {"ANYTIME"};
 
+        // get the condition
+    string vs2 = OutCONDITION();
+    vs.push_back(vs2);
+
+    // generate a random APRNG
+    vs2 = APRNGStringFromAPRNG(rg1);
+    vs.push_back(vs2);
+    vector<string> vs3 = OutTAKEREACTIONAS(); 
+    copy(vs3.begin(), vs3.end(), back_inserter(vs));
+    rkey_genrd.push_back(vs);
 }
 
 /// format: 
 void KeyGen::OutFOR() {
+    // case: no more unique characters left for FOR command
+    if (ck2.size() == 0) {
+        return;
+    }
 
+    string vs2 = "FOR "; 
+    // select an element from ck2
+    int i = rg1->PRIntInRange(make_pair(0,ck2.size() - 1));
+    vs2 += ck2[i];
+    ck2.erase(ck2.begin() + i);
+
+    vector<string> vs = {vs2};
+    
+    vs2 = "IF ";
+    vs2 += OutCONDITION();
+    vs.push_back(vs2);
+
+    vector<string> vs3 = OutTAKEREACTIONAS(); 
+    copy(vs3.begin(), vs3.end(), back_inserter(vs));
+    rkey_genrd.push_back(vs);
+}
+
+string KeyGen::OutCONDITION() {
+    string s = "COND ";
+    int i = rg1->PRIntInRange(make_pair(1,possible_conds.size()));
+    s += "C" + to_string(i);
+    s += " W/";
+    return s;
+}
+
+vector<string> KeyGen::OutTAKEREACTIONAS() {
+    vector<string> vs;
+    vs.push_back("TAKE REACTION AS");
+
+    // probability of RTMODINSTR or RTMODUTG
+    int i = rg1->PRIntInRange(make_pair(0,1));
+    string vs2 = "";
+        /// CASE: RTMODINSTR
+    int target = 0;
+    if (i == 0) {
+        vs.push_back("MODINSTR");
+        vs2 = APRNGStringFromAPRNG(rg1);
+        vs.push_back(vs2);
+        target = 1;
+    } else {
+        /// CASE: RTMODUTG
+        vs.push_back("MODUTG");
+        vs2 = OutUTGSCommandSwap();
+        vs.push_back(vs2);
+    }
+    vs.push_back("ENDREACT");
+
+    // done
+    if (!target) {
+        return vs;
+    }
+
+    vs.push_back("ON");
+
+    // choose random character targets for the
+    i = rg1->PRIntInRange(make_pair(1,6));
+    int j;
+    string s = ""; 
+    while (i > 0) {
+        j = rg1->PRIntInRange(make_pair(0,ck.size() - 1));
+        s += ck[j] + ",";
+        i -= 1;
+    }
+
+    s = s.substr(0,s.size() -1); 
+    vs.push_back(s);
+    return vs;
+}
+
+/// outputs a string command for UTGSwapper.
+/// 
+/// The number of swaps is in the range [2,28].
+string KeyGen::OutUTGSCommandSwap() {
+    int j = rg1->PRIntInRange(make_pair(0,2));
+    int num_args = (j == 0)? 1: 2;
+    string s = "";
+    if (j == 0) {
+        s = "RSwap,";
+    } else if (j == 1) {
+        s = "ObjSwap,";
+    } else {
+        s = "TNSwap,";
+    }
+
+    int j2 = rg1->PRIntInRange(make_pair(2,28));
+    s += to_string(j2);
+    // case: RSwap args are finished.
+    if (num_args != 2) {
+        return s;
+    }
+
+    s += "," + APRNGStringFromAPRNG(rg1);
+
+    // case: ObjSwap needs one more argument
+    if (j == 1) {
+        j2 = rg1->PRIntInRange(make_pair(0,1));
+        s += "," + j2;
+    }
+
+    return s;
 }
 
 void KeyGen::WriteToFile() {

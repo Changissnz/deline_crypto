@@ -522,6 +522,7 @@ string APRNGStringArgsDeltaScheme1(string astr,AbstractPRNG* aprng) {
     return sx;
 }
 
+/// CAUTION: 
 /// NOTE: type `permlcg` is excluded from this function
 string APRNGStringFromAPRNG(AbstractPRNG* aprng) {
     // make the aprng string
