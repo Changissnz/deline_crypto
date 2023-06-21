@@ -3,6 +3,7 @@
 void KeyGen::OutCKeyBasic() {
     ckey_genrd.clear();
 
+    int cl = ck.size();
     for (int i = 0; i < cl; i++) {
         ckey_genrd.push_back(OutOneCKeyBasic());
     }
@@ -235,6 +236,14 @@ pair<int,int> KeyGen::OutColumnD22Pair() {
 
 /////////////////////// for <RInst>
 
+void KeyGen::OutRKeyBasic() {
+
+}
+
+void KeyGen::OutOneRKeyBasic() {
+
+}
+
 void KeyGen::OutANYTIME() {
 
 }
@@ -244,6 +253,6 @@ void KeyGen::OutFOR() {
 
 }
 
-void KeyGen::OutOneRKeyBasic() {
+void KeyGen::WriteToFile() {
 
 }

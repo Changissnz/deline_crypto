@@ -292,7 +292,7 @@ void INSDINST(DMDTraveller* dt, DInstSeq* di, AbstractPRNG* aprng) {
     
     // declare a new KeyGen
     pair<int,map<int,int>> info = dt->Info();
-    KeyGen* kg = new KeyGen(aprng,nullptr,"","",info,2);
+    KeyGen* kg = new KeyGen(aprng,nullptr,"","",info);
     int i1 = aprng->PRFloatInRange(make_pair(0.,100.),5);
 
     // generate a string command w/ the KeyGen

@@ -66,7 +66,7 @@ public:
     void LoadUTGS();
     bool CheckGraph(UTGraph* utg);
     DInstSeq* LoadOneCommand(bool is_ik);
-    mat OneChar(std::string c);
+    std::pair<mat,int> OneChar(std::string c);
 };
 
 #endif

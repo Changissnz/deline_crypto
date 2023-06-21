@@ -162,7 +162,9 @@ DInstSeq* DBot::LoadOneCommand(bool is_ik) {
     return dis; 
 }
 
-mat DBot::OneChar(string c) {
+/// - return:
+/// (encoding of character `c`, integer mapping of `c`)
+pair<mat,int> DBot::OneChar(string c) {
     mat m = mat(0,0,fill::zeros);
-    return m;
+    return make_pair(m,0);
 }
