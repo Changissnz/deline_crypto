@@ -41,17 +41,6 @@ public:
 
 };
 
-/*
-class FFactorAlg {
-};
-*/
-
-// wanted token-to-vertex pairs
-class WantedTVPairs {
-
-};
-
-
 /// - string of the format
 ///  node1.node2,node3.node4,...
 ///
@@ -80,8 +69,6 @@ public:
 
     std::string ToString();
     void NodeFromString(std::string s);
-    //UTNode AddNodeByString(std::string s);
-
     static UTGraph FromFile(std::string fp);
     static UTGraph FromUTNodeVec(std::vector<UTNode*> utnv);
 
@@ -101,24 +88,7 @@ public:
     std::string NodeOfToken(std::string t);
 
     int MaxNodeDegree();
-
-    //////// TODO: delete these methods; no longer needed.    
-    //void InfoProc();
-
-    //void Routine1(AbstractPRNG* ag);
-    //void Routine2(AbstractPRNG* ag);
-    //void Routine3(AbstractPRNG* ag);
-
-    //std::string LabelSwap(pair<string,string>);
-    //void ConsiderBestSwaps();
-
-    //std::pair<float,float> SwapScore(std::pair<std::string,std::string> p);
-    //void SwapEdge(std::pair<std::string,std::string> p);
-
-
     float CumulativeDistanceMeasure();
-
-    //int MinumumCumulativeDistance();
 };
 
 #endif 

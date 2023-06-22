@@ -1,4 +1,3 @@
-
 #ifndef DBOT_HPP
 #define DBOT_HPP
 
@@ -7,22 +6,6 @@
 
 // possible deineation schemes
 static std::set<std::string> possible_dschemes = {"nodup","nocross","nojag"};
-
-
-class Reactor {
-
-    std::vector<RInst*> anytimer;
-    std::vector<RInst*> forr;
-
-public:
-    Reactor(std::vector<RInst*> ri) {
-        LoadInst(ri);
-    }
-
-    void LoadInst(std::vector<RInst*> ri);
-
-};
-
 
 /// delineation bot
 class DBot {
@@ -41,7 +24,10 @@ public:
     std::pair<bool,std::pair<std::string,std::string>> utgfp;
     std::vector<std::string> cs;
     std::map<std::string,DInstSeq*> mcd; 
-    Reactor* reactor;
+    
+    
+    //Reactor* reactor;
+    std::vector<RInst*> rk;
 
     // reader for the instruction keys
     DataReader* dri;
@@ -75,7 +61,9 @@ public:
     void LoadUTGS();
     bool CheckGraph(UTGraph* utg);
     std::pair<DInstSeq*,RInst*> LoadOneCommand(bool is_ik);
-    std::pair<mat,int> OneChar(std::string c);
+    std::pair<std::pair<mat,int>,std::pair<std::string,std::string>> OneChar(std::string c);
+    std::pair<DInstSeq*,std::string> CharToInstr(std::string c);
+    int CharToInt(std::string c);
 };
 
 #endif

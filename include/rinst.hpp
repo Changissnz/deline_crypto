@@ -32,10 +32,8 @@ public:
     void Parse();
     void Parse_();
 
-    DInstSeq* React(DMDTraveller* dmdt,DInstSeq* dis, UTGSwapper* utgs,string chrcter); 
-
-    void ActivateReaction();
-    std::vector<DInstSeq*> FetchReactionTargets();
+    ///DInstSeq* React(DMDTraveller* dmdt,DInstSeq* dis, string chrcter); 
+    bool ReactDecision(DMDTraveller* dmdt,DInstSeq* dis,std::string chrcter);
 };
 
 #endif

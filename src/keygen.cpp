@@ -297,6 +297,29 @@ string KeyGen::OutCONDITION() {
     return s;
 }
 
+///         * format*
+/// TAKE REACTION AS
+///   ** form 1 or form 2 **
+/// ENDREACT
+/// ** below only necessory for form 1**
+/// ON
+/// target_characters_separated_by_comma
+///
+///--------------------------------------
+///     * form 1*
+/// MODINSTR
+/// aprng_string
+/// 
+///     * form 2*
+/// MODUTG
+/// UTGSwapper_command_swap 
+///--------------------------------------
+/// NOTE: 
+/// Capital words are KEYWORD markers for ANYTIME,FOR statements
+/// and must always be included.The lines that begin and end w/
+/// ** are comments and are NOT included in the command.
+/// The words separated by underscores are variables, described
+/// by their naming. 
 vector<string> KeyGen::OutTAKEREACTIONAS() {
     vector<string> vs;
     vs.push_back("TAKE REACTION AS");

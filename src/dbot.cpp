@@ -80,12 +80,9 @@ void DBot::LoadRKey() {
         return;
     }
 
-    vector<RInst*> rk; 
     while (!drr->finished) {
         rk.push_back(LoadOneCommand(false).second);
     }
-
-    reactor = new Reactor(rk);
 }
 
 void DBot::LoadUTGS() {
@@ -172,26 +169,38 @@ pair<DInstSeq*,RInst*> DBot::LoadOneCommand(bool is_ik) {
 
 /// - return:
 /// (encoding of character `c`, integer mapping of `c`)
-pair<mat,int> DBot::OneChar(string c) {
-    mat m = mat(0,0,fill::zeros);
-    return make_pair(m,0);
+pair<pair<mat,int>,pair<string,string>> DBot::OneChar(string c) {
+
+    /// fetch the appropriate DInst
+    pair<DInstSeq*,string> dism = CharToInstr(c);
+    
+    // calculate the output
+    (dism.first)->Map(dmdt);
+    mat m = ((dism.first)->MOsequence(dmdt)).first;
+    int j = CharToInt(dism.second);
+    pair<mat,int> sol = make_pair(m,j);
+
+    pair<string,string> sol2 = make_pair(c,dism.second);
+    // done
+    return make_pair(sol,sol2);
 }
 
-////////////////////////////////////
+/// c := node identifier
+pair<DInstSeq*,string> DBot::CharToInstr(string c) {
+    // get the token identifier
+    string iidt = ((utgs->utg)->nodes[c])->iidt;
+    return make_pair(mcd[iidt],iidt);
+}
 
-void Reactor::LoadInst(vector<RInst*> ri) {
-
-    while (ri.size() > 0) {
-
-        if (ri[0]->c1 == "ANYTIME") {
-            anytimer.push_back(ri[0]);
-        } else if (ri[0]->c1 == "FOR") {
-            forr.push_back(ri[0]);
-        } else {
-            assert(1 == 0); 
+/// c := token identifier
+///
+/// return:
+/// - 
+int DBot::CharToInt(string c) {
+    for (int i = 0; i < cs.size(); i++) {
+        if (cs[i] == c) {
+            return i;
         }
-
-        ri.erase(ri.begin() + 0);
     }
-
+    return -1;
 }

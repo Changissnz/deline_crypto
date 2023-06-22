@@ -97,7 +97,8 @@ void RInst::Parse_() {
 }
 
 /// TODO: incomplete
-DInstSeq* RInst::React(DMDTraveller* dmdt,DInstSeq* dis, UTGSwapper* utgs,string chrcter) {
+bool RInst::ReactDecision(DMDTraveller* dmdt,DInstSeq* dis,string chrcter) {
+    /// UTGSwapper* utgs,string chrcter) {
     bool stat = false;
 
     // case: check FOR character condition
@@ -107,24 +108,10 @@ DInstSeq* RInst::React(DMDTraveller* dmdt,DInstSeq* dis, UTGSwapper* utgs,string
 
         // no reaction 
     if (!stat) {
-        return dis;
+        return false;
     }
 
     // check ckonditional
     string cid = (c1 == "FOR") ? c3 : c2;
-    bool rc = RCONDITIONAL(dmdt,dis,cid,cond_args);
-
-        // no reaction
-    if (!rc) {
-        return dis;
-    }
-
-    // case: reaction
-
-    DInstSeq* dis2 = dis;
-
-    return dis2;
-
+    return RCONDITIONAL(dmdt,dis,cid,cond_args);
 }
-
-/// TODO: work on reactions.cpp commands next. 
