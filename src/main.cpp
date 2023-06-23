@@ -1,29 +1,3 @@
-//#include "edge_selectors.hpp" 
-//#include "fit22.hpp"
-/*
-#include "deline_mc.hpp"
-#include "data_reader.hpp"
-//#include "big_ozz_function_mapper.hpp"
-//#include "dmd_traveller.hpp"
-#include "accessory_functions.hpp"
-*/
-#include "gmech.hpp"
-#include "gsearch_basic.hpp"
-#include "ffact.hpp"
-#include "utgs.hpp"
-
-
-#include "dmd_traveller.hpp"
-#include "dinst.hpp"
-//#include "keygen.cpp"
-//#include "modif_patterns.hpp"
-
-#include "rinst.hpp" 
-
-#include "randumb_check.hpp" 
-#include "accessory_functions.hpp"
-#include "gen_struct.hpp"
-
 #include "dcbot.hpp"
 
 #include <iostream> 
@@ -40,7 +14,6 @@ using namespace std;
 /// work on `accessory_functions`
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-
 
 UTGraph UTGraphSwapCase1DOT1() {
     UTGraph utg1 = UTGraph();

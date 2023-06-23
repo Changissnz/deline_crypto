@@ -96,22 +96,11 @@ TEST(UTGSwapper_SwapOneTypeRoute_Case1DOT1_PerformanceTest, UTGSwapper_SwapOneTy
 
 
 TEST(UTGSwapper_SwapOneTypeRoute_Case2_PerformanceTest, UTGSwapper_SwapOneTypeRoute_Case2_PerformanceTestCorrect) {
-    cout << "SADF" << endl;
     LCG* lcg = new LCG(3,6,12,500);
     PermLCG* plcg = new PermLCG(4,2,3,27);
     UTGraphGen* utgg = new UTGraphGen(STD_NODE_LIST,make_pair(2,STD_NODE_LIST.size() - 10), lcg,plcg);
     utgg->LoadUTGraph();
     UTGSwapper* utgs = new UTGSwapper(utgg->utg,lcg,true);
-
-    /// test case 1: infinite loop
-    /*
-    utgs->Preprocess();
-    cout << "AFTER PREPROCESSING" << endl;
-    utgs->InitialRunTypeRoute();
-    cout << "SUMMARIO" << endl;
-    ((utgs->usi)->sh)->Summarize(true);
-    */
-    ///////////////////////////////////////
     utgs->Preprocess();
     utgs->PreloadInitialRunTypeRoute();
 
