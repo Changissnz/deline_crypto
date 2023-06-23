@@ -172,7 +172,7 @@ public:
     void SwapPath(GPath gp);
     void SwapT(std::string n1,std::string n2);  
     void SwapT(std::string n1,std::string n2,bool b); 
-    std::pair<std::pair<std::string,std::string>,std::pair<int,int>> RandomSwapOnNode(std::string nd, bool obj_best,bool no_repeat = false);
+    std::pair<std::pair<std::string,std::string>,std::pair<int,int>> RandomSwapOnNode(std::string nd, bool obj_best,bool no_repeat = true);
 
     void DisplayComponentSetTokenDistance(std::set<std::string> csi);
     void DisplayAllTokenDistances();

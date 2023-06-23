@@ -14,6 +14,17 @@ float RoundDecimalNPlaces(float x,int d);
 bool FloatEquals(float f,float f2,int d); 
 std::vector<std::string> SplitStringToVector(std::string s, const char* delimiter);
 
+template<typename T>
+std::string IterableToString(const T& t1,const char* delimiter) {
+  std::string sx = "";
+
+  for (auto tx: t1) {
+    sx += std::to_string(tx) + delimiter;
+  } 
+  return sx;
+}
+
+
 template<typename C>  
 std::string NumIterToStringType(const C& container, std::string delimiter, int roundingDepth) {
     std::string output = ""; 
@@ -98,10 +109,6 @@ float MeanSequentialEuclideanDistance(mat m);
 
 /// NOTE: unused, does not work for some cases. 
 std::pair<float,float> QuadraticFormula(float a, float b, float c);
-
-//// TODO:
-// mat NMinPointsByEuclideanDistance(mat m, rowvec p);
-
 mat IndiceRangeToSubArmaMat(mat m, std::pair<int,int> irnge);
 mat IndiceRangeToPalindromicSubArmaMat(mat m, std::pair<int,int> irnge);
 

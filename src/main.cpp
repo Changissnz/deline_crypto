@@ -24,6 +24,8 @@
 #include "accessory_functions.hpp"
 #include "gen_struct.hpp"
 
+#include "dcbot.hpp"
+
 #include <iostream> 
 #include <vector>
 #include <type_traits>
@@ -127,10 +129,11 @@ UTGraph UTGraphSwapCase3() {
 }
 
 int main(int argc, char **argv) {
-
+    /*
     LCG* lcg = new LCG(8,7,5,31);
     vector<LCG*> lcgv = {lcg};
     lcgv.erase(lcgv.begin() + 0);
     assert(lcg != nullptr);
     return 1;
+    */
 }

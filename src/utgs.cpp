@@ -114,9 +114,13 @@ vector<string> GPathToComponentNodes(UTComponentGraph* utcg, GPath gp) {
 vector<pair<string,pair<int,int>>> SortSwapScoresType1(vector<pair<string,pair<int,int>>> sv) {
     sort(sv.begin(),sv.end(), [](pair<string,pair<int,int>> l, pair<string,pair<int,int>> r)
     {
-        // best case
-            //// LINE:
-        /*
+
+        //cout << "\t\tSORTING" << endl; 
+        //cout << l.first << "|" << l.second.first << "," << l.second.second << endl;
+        //cout << r.first << "|" << r.second.first << "," << r.second.second << endl;
+
+
+        /// VARIANT:
         if (l.first == r.first) {
             return false;
         }
@@ -125,40 +129,45 @@ vector<pair<string,pair<int,int>>> SortSwapScoresType1(vector<pair<string,pair<i
             (l.second.second == r.second.second)) {
             return false;
         }
-        */
 
+        bool stat1 = (l.second.first < 0) && (l.second.second < 0);
+        bool stat2 = (r.second.first < 0) && (r.second.second < 0);
+
+        if (stat1 && !stat2) {
+            return true;
+        }
+
+        if (!stat1 && stat2) {
+            return false;
+        }
+
+        if (l.second.first + l.second.second < r.second.first + r.second.second) {
+            return true;
+        } 
+
+        return false;
+        
+        /////////////////////////////////
+
+        /// WARNING: this one will fail for some swap choices
         /*
+        if ((l.second.first < 0) && (l.second.second < 0)) {
+            return true;
+        }
+
         if ((r.second.first < 0) && (r.second.second < 0)) {
             return false;
         }
 
-        if ((l.second.first < 0) && (l.second.second < 0)) {
-            return true;
-        } 
-
-        if ((l.second.first + l.second.second) < 
-            (r.second.first + r.second.second)) {
+        if (l.second.first < 0 ) {
             return true;
         }
 
         return false;
         */
-        
-        if ((l.second.first < 0) && (l.second.second < 0)) {
-            return true;
-        } 
-
-        if ((r.second.first < 0) && (r.second.second < 0)) {
-            return false;
-        }
-
-        if (l.second.first < 0) {
-            return true;
-        }
-        
-        return false;
     });
 
+    cout << "DONESORT" << endl;
     return sv;
 }
 
@@ -426,6 +435,9 @@ void UTGSwapInstruction::SwapSolveComponent(string srcid) {
         while (BijectiveTokenDistance(vpsf[i].first) > 0) {
             string l = utg->NodeOfToken(vpsf[i].first);
             pair<pair<string,string>,pair<int,int>> ps = RandomSwapOnNode(l,true);
+            if (ps.first.first == "NULLAXI") {
+                return;
+            }
             SwapT(ps.first.first,ps.first.second,false);
         }
     }
@@ -496,6 +508,10 @@ bool UTGSwapInstruction::RandomSwapOnComponent(string srcid) {
         // case: token does not solve its node. 
         if (lc != nd) {
             pair<pair<string,string>,pair<int,int>> ps = RandomSwapOnNode(lc,true);
+            if (ps.first.first == "NULLAXI") {
+                return false;
+            }
+
             SwapT(ps.first.first,ps.first.second);
             return true;
         }
@@ -565,9 +581,8 @@ pair<pair<string,string>,pair<int,int>> UTGSwapInstruction::RandomSwapOnNode(str
     // score the possible swaps involving node `nd`
     vector<pair<string,string>> vps = (utg->nodes[nd])->NeighborsStringVec();
     vector<pair<string,pair<int,int>>> vps2;
-    
     for (auto vp: vps) {
-        if (no_repeat && (vp.second == pnrs)) {
+        if (no_repeat && ((vp.second == pnrs) || (vp.first == pnrs))) {
             continue;
         }
 
@@ -583,12 +598,13 @@ pair<pair<string,string>,pair<int,int>> UTGSwapInstruction::RandomSwapOnNode(str
     if (vps2.size() == 0) {
         cout << "ERROR: no possible swap available for lone node" << endl;
         return make_pair(
-            make_pair("AWOLIENTHAO;EIWHBNT239O85R98O23HY5R", "8I23U5YRJNWTFEGU;AWENJ"),
+            make_pair("NULLAXI", "NULLAXI"),
             make_pair(10000000,20202020));
     }
 
     // sort the swaps
     vps2 = SortSwapScoresType1(vps2);
+    cout << "CHOOSING BEST SWAP" << endl;
 
     // case: obj_best is false, reverse the vector
     if (!obj_best) {
@@ -611,9 +627,16 @@ pair<pair<string,string>,pair<int,int>> UTGSwapInstruction::RandomSwapOnNode(str
         }
     }
 
+    cout << "XXXX" << endl;
+
+
     // choose a random index in the range start_index, end_index
     int j = aprng->PRIntInRange(make_pair(start_index,end_index));
     pnrs = nd;
+
+    cout << "PNRS: " << pnrs << endl;
+    cout << "best swap is: " << nd << "," << 
+        vps2[j].first << endl;
     return make_pair(make_pair(nd,vps2[j].first),vps2[j].second);
 }
 
@@ -757,7 +780,6 @@ void UTGSwapper::SwapOneTypeRoute() {
         
         // case: component remainder done, increment 
         if (!component_remainder_stat) {
-            cout << "double" << endl;
             type_route_index.first = type_route_index.first + 1;
             type_route_stat = (type_route_index.first == usi->component_order.size());
             if (type_route_stat) {
@@ -842,6 +864,10 @@ bool UTGSwapper::SwapOneTypeRouteRemainder() {
 
     // fetch a swap by `usi` and conduct it
     pair<pair<string,string>,pair<int,int>> ps = usi->RandomSwapOnNode(cn,true);
+    if (ps.first.first == "NULLAXI") {
+        return false;
+    }
+    
     usi->SwapT(ps.first.first,ps.first.second);
     return true;
 }
@@ -876,6 +902,9 @@ void UTGSwapper::SwapOneTypeObj(bool obj_best, AbstractPRNG* aprng,int iteration
 
         // fetch a swap by `usi` and conduct it
         pair<pair<string,string>,pair<int,int>> ps = usi->RandomSwapOnNode(cn,obj_best);     
+        if (ps.first.first == "NULLAXI") {
+            return;
+        }
         usi->SwapT(ps.first.first,ps.first.second);
     }
 }
@@ -904,6 +933,9 @@ void UTGSwapper::SwapOneTypeTargetNodeRoute(AbstractPRNG* aprng, int iterations)
         string cn = utg->NodeOfToken(target_node_cs);
 
         pair<pair<string,string>,pair<int,int>> ps = usi->RandomSwapOnNode(cn,true);
+        if (ps.first.first == "NULLAXI") {
+            return;
+        }
         usi->SwapT(ps.first.first,ps.first.second);
 
         // reset `target_node_cs` if node has been solved

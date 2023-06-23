@@ -4,8 +4,6 @@
 #include "reactions.hpp"
 #include "rinst_conditions.hpp"
 
-//#include <vector>
-
 class RInst {
 public:
     /// initial parameter that needs to be parsed
@@ -31,8 +29,6 @@ public:
 
     void Parse();
     void Parse_();
-
-    ///DInstSeq* React(DMDTraveller* dmdt,DInstSeq* dis, string chrcter); 
     bool ReactDecision(DMDTraveller* dmdt,DInstSeq* dis,std::string chrcter);
 };
 

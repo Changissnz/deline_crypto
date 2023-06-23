@@ -57,7 +57,6 @@ void Reactor::ReactOnTargets(DBot* db, RInst* ri) {
     }
 }
 
-
 RInst* Reactor::ReactantForChar(string s) {
 
     for (auto f: forr) {
