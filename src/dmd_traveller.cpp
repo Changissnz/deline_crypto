@@ -404,7 +404,6 @@ pair<int,int> DMDTraveller::LastNthSequenceIndices(int i) {
 }
 
 DMDTraveller* DMDTravellerCase1() {
-    StdRandGenerator* srg = new StdRandGenerator(9);
     mat m2 = basic_matrix_read("t6.csv"); 
 
     vector<pair<string,bool>> x1 = {

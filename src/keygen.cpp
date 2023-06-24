@@ -304,6 +304,10 @@ void KeyGen::OutFOR() {
     vs2 = "IF ";
     vs2 += OutCONDITION();
     vs.push_back(vs2);
+    
+    // generate an aprng string
+    vs2 = APRNGStringFromAPRNG(rg1);
+    vs.push_back(vs2);
 
     vector<string> vs3 = OutTAKEREACTIONAS(); 
     copy(vs3.begin(), vs3.end(), back_inserter(vs));

@@ -16,11 +16,20 @@ void DBot::LoadFiles() {
 ///     - int; axis of delineation
 /// the fourth line is for the <AbstractPRNG> instance.
 void DBot::LoadDMDT() {
+    pair<DelineMD*,AbstractPRNG*> dmd = LoadDMD();
+    cout << "performing delineation" << endl;
+    dmd.first->DelineateFull();
 
+    // declare the AbstractPRNG
+    dmdt = new DMDTraveller(dmd.first, dmd.second);
+}
+
+pair<DelineMD*,AbstractPRNG*> DBot::LoadDMD() {
+    
     string s;
     vector<string> vs;
-    while (!dri->finished) {
-        s = dri->ReadNextLine();
+    while (!drdi->finished) {
+        s = drdi->ReadNextLine();
         if (s == "") {
             break;
         }
@@ -53,18 +62,13 @@ void DBot::LoadDMDT() {
         mhc.push_back(stoi(vs2_)); 
     }
 
-    DelineInstr* di = new DelineInstr(instr,mhc); 
-
+    DelineInstr* di = new DelineInstr(instr,mhc);
+    drd->ReadEntire();
     drd->BatchNConversion();
-    DelineMD* dmd = new DelineMD(drd->ndata,di, stoi(vs[2]), false);
-    
-    cout << "performing delineation" << endl;
 
-    dmd->DelineateFull();
-
-    // declare the AbstractPRNG
     AbstractPRNG* aprng = APRNGFromString(vs[3]);
-    dmdt = new DMDTraveller(dmd, aprng);
+    DelineMD* dmd = new DelineMD(drd->ndata,di, stoi(vs[2]), false);
+    return make_pair(dmd,aprng);
 }
 
 void DBot::LoadIKey() {
@@ -99,19 +103,19 @@ void DBot::LoadUTGS() {
         assert(vs2.size() == 2);
         pair<int,int> dr = make_pair(stoi(vs2[0]),stoi(vs2[1]));
 
-        AbstractPRNG* aprng2 = APRNGFromString(utgfp.second.second);
+        AbstractPRNG* aprng2 = APRNGFromString(utgfp.second.first);
 
         vector<string> vs3 = SplitStringToVector(vs[2], " ");
         assert(vs3.size() == 5);
         PermLCG* plcg = new PermLCG(stoi(vs3[0]),stoi(vs3[1]),stoi(vs3[2]),
             stoi(vs3[3]),stof(vs3[4]));
-
         UTGraphGen ugg = UTGraphGen(cs,dr,aprng2,plcg);
+
         ugg.LoadUTGraph();
         utg = ugg.utg; 
     }
-        assert(CheckGraph(utg));
 
+    assert(CheckGraph(utg));
     utgs = new UTGSwapper(utg,aprng,false);
 }
 
@@ -153,7 +157,7 @@ pair<DInstSeq*,RInst*> DBot::LoadOneCommand(bool is_ik) {
         if (s == "") {
             break;
         }
-
+        cout << ".\t" << s << endl;
         vs.push_back(s); 
     }
 

@@ -18,13 +18,17 @@ public:
     std::string rfp;
     /// filepath for dataset used by DMDTraveller
     std::string dfp;
-    /// is_filepath,
-    /// [generate graph] deg_range UNDERSCORE aprng string used by UTGSwapper UNDERSCORE string args for PermLCG
-    /// [load from file] (filepath for UTGraph|aprng string to generate UTGraph)
+    /// filepath for delineation instructions
+    std::string difp;
+
+    /// [0] is_filepath,
+    /// [1,0] aprng string for UTGSwapper
+    /// [1,1] 
+    ///         if is_filepath => filepath 
+    ///         otherwise => deg_range UNDERSCORE aprng string used by UTGSwapper UNDERSCORE string args for PermLCG
     std::pair<bool,std::pair<std::string,std::string>> utgfp;
     std::vector<std::string> cs;
     std::map<std::string,DInstSeq*> mcd; 
-    
     
     //Reactor* reactor;
     std::vector<RInst*> rk;
@@ -35,15 +39,18 @@ public:
     DataReader* drr;
     // reader for the dataset
     DataReader* drd;
+    // reader for the dataset instructions
+    DataReader* drdi;
 
     DMDTraveller* dmdt;
     UTGSwapper* utgs;
 
-    DBot(std::string ifp, std::string rfp,std::string dfp,std::pair<bool,
+    DBot(std::string ifp, std::string rfp,std::string dfp,std::string difp, std::pair<bool,
         std::pair<std::string,std::string>> utgfp, std::vector<std::string> character_sequence) {
         this->ifp = ifp;
         this->rfp = rfp;
         this->dfp = dfp;
+        this->difp = difp;
         this->utgfp = utgfp;
         dri = new DataReader(ifp,50);
         if (this->rfp != "") {
@@ -51,11 +58,13 @@ public:
         }
 
         drd = new DataReader(dfp,50);
+        drdi = new DataReader(difp,50);
         cs = character_sequence;
     }
 
     void LoadFiles();
     void LoadDMDT();
+    std::pair<DelineMD*,AbstractPRNG*> LoadDMD();
     void LoadIKey();
     void LoadRKey();
     void LoadUTGS();

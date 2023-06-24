@@ -3,7 +3,6 @@
 using namespace std;
 
 TEST(KeyGen_Out_Case1_DemoTest, KeyGen_Out_Case1_DemoTestCorrect) {
-    return;
     DMDTraveller* dmdt = DMDTravellerCase1();
     LCG* lcg = new LCG(7,8,5,1000);
 

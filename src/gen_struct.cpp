@@ -8,6 +8,7 @@ void UGraphGen::Generate() {
     }
 }
 
+/// TODO: buggy 
 void UGraphGen::ConnectTargetNode() {
     // choose a node not in excluded
     vector<int> vi;
@@ -17,7 +18,13 @@ void UGraphGen::ConnectTargetNode() {
         }
         vi.push_back(i);
     }
+    
+    // case: no more
+    if (vi.size() == 0) {
+        return;
+    }
 
+    cout << "VI: " << vi.size() << endl;
     int j = aprng->PRIntInRange(make_pair(0,vi.size() - 1));
     int tn = vi[j]; 
     excluded.insert(tn);
@@ -35,13 +42,23 @@ void UGraphGen::ConnectTargetNode() {
             continue;
         }
 
-        if (mx(tn,i) == 0.) {
+        bool stat1 = (mx(tn,i) == 0.);
+        double dx2 = accu(mx.col(i));
+        bool stat2 = (dx2 < deg_range.second);
+        if (stat1 && stat2) {
             vi.push_back(i);
         }
     }
 
+    /*
+    if (dx >= deg_range.second) {
+        return;
+    } 
+    */
+
     // get the calibrated `deg_range`
     pair<int,int> dr2 = make_pair(dx, deg_range.second);
+    //cout << "VI2: " << dr2.first << " " << dr2.second << endl;
 
     // get the wanted number of additional connections
     int wc = aprng->PRIntInRange(dr2) - dx;
@@ -66,9 +83,11 @@ void UTGraphGen::LoadUTGraph() {
     ugg->Generate();
     // generate the token ordering
     pair<int,int> pix = make_pair(int(0),char_list.size() -1);
+    cout << "SET RANGE: " << pix.first << " " << pix.second << endl;
     plcg->SetRangeData(pix);
-
+    cout << "CYCLE: " << endl;
     ivec iv = conv_to<ivec>::from(plcg->CycleOne(false,3));
+    cout << "ENDCYCLE" << endl;
     
     // use a map to store the int-string pairs
     map<int,string> mis;
@@ -78,19 +97,50 @@ void UTGraphGen::LoadUTGraph() {
 
     // build the UTGraph
     utg = new UTGraph();
+    cout << "uggmx: " << ugg->mx.n_rows << " "
+        << ugg->mx.n_cols << endl;
+
+    //cout << "UGGMX" << endl;
+    //cout << ugg->mx << endl;
 
     // iterate through matrix and assign nodes
     // and edges to `utg`.
     pair<string,string> p1;
     pair<string,string> p2;
+    int es = 0;
+    int es3 = 0;
+    vector<int> disconn;
     for (int i = 0; i < ugg->mx.n_rows; i++) {
         p1 = make_pair(char_list[i],char_list[iv(i)]);
+
+        // case: disconnected, find one to connect to
+        int es2 = accu(ugg->mx.row(i));
+        if (es2 == 0) {
+            for (int j = 0; j < ugg->mx.n_cols;j++) { 
+                if (j == i) {
+                    continue;
+                }
+
+                int es3 = accu(ugg->mx.row(i));
+                if (es3 < ugg->deg_range.second) {
+                    p2 = make_pair(char_list[j],char_list[iv(j)]);
+                    utg->AddEdge(p1,p2); 
+                }
+            }
+            continue;
+        }
+    
         for (int j = 0; j < ugg->mx.n_cols;j++) {
             if (ugg->mx(i,j) == 1.) {
                 p2 = make_pair(char_list[j],char_list[iv(j)]);
                 utg->AddEdge(p1,p2); 
+                es += 1;
             }
         }
+
     }
+
+    cout << "ES: " << es << endl;
+    cout << "ES3: " << es3 << endl;
 }
 

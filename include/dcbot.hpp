@@ -23,12 +23,12 @@ public:
     ofstream fx1;
     ofstream fx2;
 
-    DCBot(std::string ifp, std::string rfp,std::string dfp,
+    DCBot(std::string ifp, std::string rfp,std::string dfp,std::string difp,
         std::pair<bool,std::pair<std::string,std::string>> utgfp,
         std::vector<std::string> character_sequence,
         std::string inputf,std::pair<std::string,std::string> outputf) {
 
-        this->db = new DBot(ifp,rfp,dfp,utgfp,character_sequence);
+        this->db = new DBot(ifp,rfp,dfp,difp,utgfp,character_sequence);
         this->inputf = inputf;
         this->outputf = outputf;
         load_stat = false;

@@ -94,7 +94,7 @@ public:
     UGModule(UTGraph* utg,AbstractPRNG* aprng, int reqm = 2) {
         this->utg = utg;
         this->aprng = aprng;
-        assert (reqm > 1); 
+        assert (reqm >= 1); 
         this->reqm = reqm;
         finstat = false;
     }

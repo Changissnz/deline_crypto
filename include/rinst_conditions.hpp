@@ -5,8 +5,7 @@
 #include "dinst.hpp"
 
 static std::set<std::string> possible_c1 = {"ANYTIME", "FOR"};
-static std::set<std::string> possible_conds = {"C1","C2","C3","C4",
-                        "C5","C6"};
+static std::set<std::string> possible_conds = {"C1","C2","C3","C4","C5","C6"};
                         
 bool C1__IN_BOUNDS_OF_DELINEATION(DMDTraveller* dmdt,DInstSeq* di,std::string desc);
 ivec C1__IN_BOUNDS_OF_DELINEATION_(DMDTraveller* dmdt,DInstSeq* di);
