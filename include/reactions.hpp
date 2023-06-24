@@ -1,10 +1,12 @@
 #ifndef REACTIONSINYOURFACE_HPP
 #define REACTIONSINYOURFACE_HPP
 
-#include "dmd_traveller.hpp"
+//#include "dmd_traveller.hpp"
 #include "utgs.hpp"
 #include "dinst.hpp"
 #include "randumb.hpp"
+#include "keygen.hpp"
+
 
 /// modifies the instruction
 DInstSeq* RTMODINSTR(DMDTraveller* dmdt, DInstSeq* di, std::string vs);

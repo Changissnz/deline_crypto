@@ -1,5 +1,10 @@
 #include "keygen.hpp"
 
+void KeyGen::Out() {
+    OutCKeyBasic();
+    OutRKeyBasic();
+}
+
 void KeyGen::OutCKeyBasic() {
     ckey_genrd.clear();
 
@@ -33,7 +38,7 @@ vector<string> KeyGen::OutOneCKeyBasic() {
         s.push_back(OutBG());
         r -= 1;
     }
-    
+
     //      - 4/5ths chance that there is a mask
     if (rg1->PRFloatInRange(make_pair(0.,1.), 5) <= 0.8) {
         s.push_back(OutMSK());
@@ -43,7 +48,6 @@ vector<string> KeyGen::OutOneCKeyBasic() {
     // make MO commands for the rest
     for (int i = 0; i < r; i++) {
         s.push_back(OutMO());
-
         if (rg1->PRFloatInRange(make_pair(0.,1.),5) >= 0.2) {
             s.push_back(OutHOP());
         }
@@ -124,12 +128,14 @@ string KeyGen::OutMO() {
     
     for (int i = 0; i < length_of_dirpace; i++) {
         int j = rg1->PRIntInRange(make_pair(0,3));
-        mo += IntToNavDir(j) + ".";
+        string dx = IntToNavDir(j); 
+        mo += dx + ".";
     }
     mo = mo.substr(0,mo.size() - 1);
     mo += ",";
     for (int i = 0; i < length_of_dirpace; i++) {
-        mo += to_string(rg1->PRFloatInRange(make_pair(0.001,2.),5)) + "_";
+        float rf = rg1->PRFloatInRange(make_pair(0.001,2.),5); 
+        mo += to_string(rf) + "_";
     }
 
     mo = mo.substr(0,mo.size() - 1);
@@ -223,13 +229,19 @@ string KeyGen::OutHOP() {
     pair<int,int> pi = OutColumnD22Pair();
     s += to_string(pi.first) + ",";
     s += to_string(pi.second) + ",";
-
     s += APRNGStringFromAPRNG(rg1);
     return s;
 }
 
 pair<int,int> KeyGen::OutColumnD22Pair() {
-    int index = rg1->PRIntInRange(make_pair(0,dmddim.first - 1));
+    
+    vector<int> vi;
+    for (auto q: dmddim.second) {
+        vi.push_back(q.first);
+    }
+    
+    int index_ = rg1->PRIntInRange(make_pair(0,dmddim.first - 1));
+    int index = vi[index_];
     int index2 = rg1->PRIntInRange(make_pair(0,dmddim.second[index] - 1));
     return make_pair(index,index2);
 }
@@ -237,11 +249,20 @@ pair<int,int> KeyGen::OutColumnD22Pair() {
 /////////////////////// for <RInst>
 
 void KeyGen::OutRKeyBasic() {
-
+    int i = num_reactions;
+    while (i > 0) {
+        OutOneRKeyBasic();
+        i--;
+    }
 }
 
 void KeyGen::OutOneRKeyBasic() {
-
+    int j = rg1->PRIntInRange(make_pair(0,1));
+    if (j) {
+        OutANYTIME();
+    } else {
+        OutFOR();
+    }
 }
 
 /// * see comments at <RInst::Parse_> for format*
@@ -397,6 +418,31 @@ string KeyGen::OutUTGSCommandSwap() {
     return s;
 }
 
-void KeyGen::WriteToFile() {
+void KeyGen::WriteToFile(pair<string,string> ps) {
+    WriteK(ps.first,true);
+    WriteK(ps.second,false);
+}
 
+void KeyGen::WriteK(string fp, bool is_ck) {
+    
+    TravelToBaseDir();
+    ofstream fx;
+    fx.open(fp,ofstream::trunc);// ofstream::app); 
+    
+    int j = (is_ck) ? ckey_genrd.size() : rkey_genrd.size();
+    for (int i = 0; i < j; i++) {
+        WriteCommand(&fx,i,is_ck);
+    }
+    fx.close();
+
+}
+
+void KeyGen::WriteCommand(ofstream* fx,int i,bool is_ck) {
+    vector<string> vs = (is_ck) ? ckey_genrd[i] : rkey_genrd[i];
+
+    for (auto vs_: vs) {
+        (*fx) << vs_ << endl;
+    }
+
+    (*fx) << endl;
 }

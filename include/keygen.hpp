@@ -22,6 +22,7 @@ public:
     std::vector<std::string> ck;
     // used for unique selection
     std::vector<std::string> ck2;
+    int num_reactions;
 
     std::vector<std::vector<std::string>> ckey_genrd;
     std::vector<std::vector<std::string>> rkey_genrd;
@@ -45,6 +46,7 @@ public:
         this->dmddim = dmddim;
         this->ck = char_keys;
         this->ck2 = char_keys;
+        this->num_reactions = num_reactions;
         erroneous = false;
     }
 
@@ -65,7 +67,10 @@ public:
     std::vector<std::string> OutTAKEREACTIONAS();
     std::string OutUTGSCommandSwap();
 
-    void WriteToFile();
+    void WriteToFile(std::pair<std::string,std::string> ps);
+    void WriteK(std::string fp, bool is_ck);
+    void WriteCommand(ofstream* fx,int i,bool is_ck);
+
 };
 
 #endif

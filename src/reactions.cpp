@@ -1,5 +1,4 @@
 #include "reactions.hpp"
-#include "keygen.hpp"
 
 /// TODO: test
 
@@ -162,7 +161,7 @@ void MODIFY_TYPEMO(DMDTraveller* dt,DInst* dx, AbstractPRNG* aprng) {
     string svs = "";
     int i5;
     float i6;
-    char c; 
+    string c; 
     for (int i = 0; i < i4; i++) {
         i5 = aprng->PRIntInRange(make_pair(0,3));
         i6 = aprng->PRFloatInRange(make_pair(0.01,2.),5);

@@ -3,6 +3,7 @@
 
 #include "deline_md.hpp"
 #include "randumb.hpp"
+#include "data_reader.hpp"
 
 /// TODO: estimation for runtime/memory funtions.
 ///////
@@ -73,5 +74,7 @@ public:
 
     /// TODO: swap orientation
 };
+
+DMDTraveller* DMDTravellerCase1();
 
 #endif

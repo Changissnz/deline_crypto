@@ -91,7 +91,7 @@ std::map<int, std::vector<int>> IndexMapOfIntLabelledData(mat data,int labelCol)
 ivec GatherMapValuesTypeVectorInt(std::map<int, std::vector<int>> m);
 char ComplementaryDirection(char d);
 int DirectionToAxis(char d);
-char IntToNavDir(int i);
+std::string IntToNavDir(int i);
 int NavDirToInt(char cx);
 ivec IndicesToComplementaryIndices(ivec i,int l);
 ivec IndicesMinusSet(ivec i, std::set<int> s);

@@ -402,3 +402,22 @@ pair<int,int> DMDTraveller::LastNthSequenceIndices(int i) {
 
     return make_pair(s,l);
 }
+
+DMDTraveller* DMDTravellerCase1() {
+    StdRandGenerator* srg = new StdRandGenerator(9);
+    mat m2 = basic_matrix_read("t6.csv"); 
+
+    vector<pair<string,bool>> x1 = {
+        make_pair("nojag",true),
+        make_pair("nocross",true),        
+        make_pair("nojag",false),
+        make_pair("nodup",false)};
+    
+    vector<int> vi = {1,2};
+    DelineInstr* di = new DelineInstr(x1,vi);
+    DelineMD* dmd = new DelineMD(m2, di, true);
+    dmd->DelineateFull();
+
+    LCG* lcg = new LCG(4,5,6,7);
+    return new DMDTraveller(dmd, lcg);
+}

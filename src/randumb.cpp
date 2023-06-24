@@ -14,9 +14,9 @@ float ScaleFloatRangeToRange(float x, pair<float,float> r1,pair<float,float> r2,
     if ((r1.second - r2.second) == 0) {
         return 0;
     }
-
+    
     float r = (x - r1.first) / (r1.second - r1.first);
-    r = round(r2.first + r * (r2.second - r2.first));
+    r = r2.first + r * (r2.second - r2.first);
     return RoundDecimalNPlaces(r,decimalLength); 
 }
 
