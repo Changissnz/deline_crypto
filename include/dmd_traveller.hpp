@@ -5,9 +5,6 @@
 #include "randumb.hpp"
 #include "data_reader.hpp"
 
-/// TODO: estimation for runtime/memory funtions.
-///////
-
 std::pair<char,int> IncrementNextIndexInEdges(std::vector<std::pair<char,int>>* mx, std::vector<int> szs, char direction);
 
 rowvec DeltaOnCoord(rowvec p, std::pair<float,float> dx, float sgn, int axis, AbstractPRNG* aprng);
@@ -15,7 +12,6 @@ rowvec DeltaOnPoint(std::pair<float,float> rr, rowvec p, float r0, float r1,Abst
 
 void JPMomentum(Deline22* d,AbstractPRNG* aprng, vec iv);
 vec ModifyMomentum(Deline22* d,AbstractPRNG* aprng, vec iv,int index);
-///void JitterPatternRadius(Deline22* d, ivec iv);
 
 class DelineModInstructions {
 public:
@@ -71,8 +67,6 @@ public:
     std::pair<int,int> ModuloOnD22Index(int dmci,int d22i);
     mat LastNthTPCSequence(int i);
     std::pair<int,int> LastNthSequenceIndices(int i);
-
-    /// TODO: swap orientation
 };
 
 DMDTraveller* DMDTravellerCase1();

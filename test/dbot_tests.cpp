@@ -2,8 +2,7 @@
 #include <gtest/gtest.h>
 using namespace std;
 
-TEST(DBot__LoadFiles__Case1_Test, DBot__LoadFiles__Case1_Test_Correct) {
-    /// case: loading a generated graph
+DBot* DBotSample1() {
     string ifp = "keyc1.txt";
     string rfp = "keyr1.txt";
     string difp = "dmdi1.txt";
@@ -14,6 +13,23 @@ TEST(DBot__LoadFiles__Case1_Test, DBot__LoadFiles__Case1_Test_Correct) {
     pair<string,string> utgfp_ = make_pair(utgfp1,utgfp2);
     pair<bool,pair<string,string>> utgfp = make_pair(false,utgfp_);
 
-    DBot* db = new DBot(ifp,rfp,dfp,difp,utgfp,STD_NODE_LIST);
+    return new DBot(ifp,rfp,dfp,difp,utgfp,STD_NODE_LIST);
+}
+    
+TEST(DBot__LoadFiles__Case1_Test, DBot__LoadFiles__Case1_Test_Correct) {
+    /// case: loading a generated graph
+    DBot* db = DBotSample1();
     db->LoadFiles();
 }
+
+TEST(DBot__OneChar__Case1_Test, DBot__OneChar__Case1_Test_Correct) {
+    DBot* db = DBotSample1();
+    db->LoadFiles();
+
+    string sx = "this is a message";
+    for (int i = 0; i < sx.size() - 1; i++) {
+        string sx2 = sx.substr(i,1);
+        db->OneChar(sx2);
+    }
+}
+

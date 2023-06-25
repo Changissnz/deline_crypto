@@ -157,7 +157,6 @@ pair<DInstSeq*,RInst*> DBot::LoadOneCommand(bool is_ik) {
         if (s == "") {
             break;
         }
-        cout << ".\t" << s << endl;
         vs.push_back(s); 
     }
 
@@ -174,7 +173,6 @@ pair<DInstSeq*,RInst*> DBot::LoadOneCommand(bool is_ik) {
 /// - return:
 /// (encoding of character `c`, integer mapping of `c`)
 pair<pair<mat,int>,pair<string,string>> DBot::OneChar(string c) {
-
     /// fetch the appropriate DInst
     pair<DInstSeq*,string> dism = CharToInstr(c);
     

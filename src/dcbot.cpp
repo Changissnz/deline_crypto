@@ -45,7 +45,7 @@ void DCBot::CodeOneLine(int i) {
     string sx2;
 
     for (int j = 0; j < sx.size(); j++) {
-        sx2 = sx.substr(j,j+1);
+        sx2 = sx.substr(j,1);
         auto outp = db->OneChar(sx2);
 
         WriteToOutF(outp.first);

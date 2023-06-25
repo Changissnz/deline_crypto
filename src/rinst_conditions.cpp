@@ -101,7 +101,7 @@ vec C2__ARITHMETICSEQ_IN_MOD_RANGE_(DMDTraveller* dmdt, DInstSeq* di,string desc
     rowvec rx = pseq.row(0);
 
     for (int j = 1; j < pseq.n_rows; j++) {
-        string aop_ = aop.substr(i,i+1);
+        string aop_ = aop.substr(i,1);
         if (aop_ == "+") {
             rx = rx + pseq.row(j);
         } else if (aop_ == "-") {

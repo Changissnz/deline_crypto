@@ -24,7 +24,6 @@ void UGraphGen::ConnectTargetNode() {
         return;
     }
 
-    cout << "VI: " << vi.size() << endl;
     int j = aprng->PRIntInRange(make_pair(0,vi.size() - 1));
     int tn = vi[j]; 
     excluded.insert(tn);
@@ -50,15 +49,8 @@ void UGraphGen::ConnectTargetNode() {
         }
     }
 
-    /*
-    if (dx >= deg_range.second) {
-        return;
-    } 
-    */
-
     // get the calibrated `deg_range`
     pair<int,int> dr2 = make_pair(dx, deg_range.second);
-    //cout << "VI2: " << dr2.first << " " << dr2.second << endl;
 
     // get the wanted number of additional connections
     int wc = aprng->PRIntInRange(dr2) - dx;
@@ -83,11 +75,8 @@ void UTGraphGen::LoadUTGraph() {
     ugg->Generate();
     // generate the token ordering
     pair<int,int> pix = make_pair(int(0),char_list.size() -1);
-    cout << "SET RANGE: " << pix.first << " " << pix.second << endl;
     plcg->SetRangeData(pix);
-    cout << "CYCLE: " << endl;
     ivec iv = conv_to<ivec>::from(plcg->CycleOne(false,3));
-    cout << "ENDCYCLE" << endl;
     
     // use a map to store the int-string pairs
     map<int,string> mis;
@@ -97,17 +86,11 @@ void UTGraphGen::LoadUTGraph() {
 
     // build the UTGraph
     utg = new UTGraph();
-    cout << "uggmx: " << ugg->mx.n_rows << " "
-        << ugg->mx.n_cols << endl;
-
-    //cout << "UGGMX" << endl;
-    //cout << ugg->mx << endl;
 
     // iterate through matrix and assign nodes
     // and edges to `utg`.
     pair<string,string> p1;
     pair<string,string> p2;
-    int es = 0;
     int es3 = 0;
     vector<int> disconn;
     for (int i = 0; i < ugg->mx.n_rows; i++) {
@@ -134,13 +117,10 @@ void UTGraphGen::LoadUTGraph() {
             if (ugg->mx(i,j) == 1.) {
                 p2 = make_pair(char_list[j],char_list[iv(j)]);
                 utg->AddEdge(p1,p2); 
-                es += 1;
             }
         }
 
     }
 
-    cout << "ES: " << es << endl;
-    cout << "ES3: " << es3 << endl;
 }
 

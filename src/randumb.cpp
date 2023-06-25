@@ -452,14 +452,10 @@ float ValueIndexStretchGenerator::DefaultPRFloatInRange(int decimalLength) {
 /// form (n):
 /// `some aprng subclass` `their` `arguments`
 AbstractPRNG* APRNGFromString(string s) {
-    cout << "CHECKING" << endl;
-    cout << s << endl;
-    cout << "ENDCHECK" << endl;
 
     // split the string
     vector<string> vs = SplitStringToVector(s, " ");
     assert(vs.size() > 0);
-    cout << "VS0:_" << vs[0] << "_" << endl;
     if (vs[0] == "stdrg") {
         assert (vs.size() == 2);
         return new StdRandGenerator(stoi(vs[1]));

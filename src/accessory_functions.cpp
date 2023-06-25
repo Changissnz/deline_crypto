@@ -209,7 +209,6 @@ mat HawkModificationPattern::Output(mat m) {
     rowvec rv;
     for (int i = 0; i < m.n_rows; i++) {
         j = l1->DefaultPRIntInRange();
-        //cout << "J: "
         if (j == 0) {
             continue;
         }
@@ -288,9 +287,10 @@ mat FoxMask(mat m1, mat m2, ivec iv, string smp_args) {
 ///             [5,10): LCG #2
 ///             [10,14): LCG #3
 mat SnakeMask(mat m, string smp_args) {
-    vector<ivec> vi = ParseStringToIVecs(smp_args,{5,10,15});
+    vector<ivec> vi = ParseStringToIVecs(smp_args,{5,10,14});
     SnakeModificationPattern smp = SnakeModificationPattern(vi[0], vi[1], vi[2]);
-    return smp.Output(m);
+    mat m2 = smp.Output(m);
+    return m2;
 }
 
 /// m := matrix, 2-d that is the target of modification
@@ -299,7 +299,6 @@ mat SnakeMask(mat m, string smp_args) {
 ///             [0,3): LCG #1
 ///             [4,6): LCG #2
 mat HawkMask(mat m, string smp_args) {
-    //cout << "SMP ARGS: " << smp_args << endl;
     vector<ivec> vi = ParseStringToIVecs(smp_args,{3,6});
     HawkModificationPattern hmp = HawkModificationPattern(vi[0], vi[1]);
     return hmp.Output(m);
