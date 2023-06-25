@@ -508,8 +508,12 @@ string APRNGStringArgsDeltaScheme1(string astr,AbstractPRNG* aprng) {
             o1 = o1 / operand;
         }
 
-        o1 = fmod(o1,MAX_APRNG_VAR - MIN_APRNG_VAR) + MIN_APRNG_VAR;
-        vs[i] = to_string(o1);
+        o1 = int(fmod(abs(o1),MAX_APRNG_VAR - MIN_APRNG_VAR) + MIN_APRNG_VAR);
+        if (o1 == 0) {
+            o1 = aprng->PRIntInRange(make_pair(1,MAX_APRNG_VAR));
+        }
+
+        vs[i] = to_string(int(o1));
     }
 
     string sx = "";
@@ -548,6 +552,8 @@ string APRNGStringFromAPRNG(AbstractPRNG* aprng) {
         sx += to_string(aprng->PRIntInRange(make_pair(MIN_APRNG_VAR,MAX_APRNG_VAR))) + " ";
     }
     sx = sx.substr(0,sx.size() - 1);
+    cout << "NEW APRNG" << endl;
+    cout << sx << endl;
     return sx;
 }
 

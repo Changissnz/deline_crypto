@@ -6,6 +6,8 @@
 #include "randumb.hpp"
 #include "gen_struct.hpp"
 
+static std::vector<std::string> STD_ARITHMETIC_OPS = {"+","-","*","/"};
+
 /// CAUTION: using this key with APRNG instances that "score poorly" on
 ///          variance tests might result in erroneous outcomes.
 class KeyGen {
@@ -63,9 +65,15 @@ public:
     void OutOneRKeyBasic();
     void OutANYTIME();
     void OutFOR();
-    std::string OutCONDITION();
+
+    pair<std::string,std::string> OutCONDITION();
+    std::string OutCONDITIONALDESC(std::string desc);
+    std::string OutCONDITIONALARITHMETIC();
+    std::string OutRANGE();
+
     std::vector<std::string> OutTAKEREACTIONAS();
     std::string OutUTGSCommandSwap();
+
 
     void WriteToFile(std::pair<std::string,std::string> ps);
     void WriteK(std::string fp, bool is_ck);

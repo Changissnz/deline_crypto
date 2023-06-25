@@ -10,6 +10,8 @@
 #include <armadillo>
 using namespace arma;
 
+static std::vector<std::string> STD_NAVDIR = {"l","r","t","d"};
+
 float RoundDecimalNPlaces(float x,int d);
 bool FloatEquals(float f,float f2,int d); 
 std::vector<std::string> SplitStringToVector(std::string s, const char* delimiter);

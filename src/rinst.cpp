@@ -62,11 +62,11 @@ void RInst::Parse_() {
         assert(vs.size() == 4);
         assert((vs[0] == "IF") && (vs[1] == "COND") && (vs[3] == "W/"));
         assert(possible_conds.find(vs[2]) != possible_conds.end());
-        c3 = vs[1];
+        c3 = vs[2];
     }
 
     // assign the arguments to the condition
-    cond_args = vs[2];
+    cond_args = inf[2];
 
     // get the reaction
     vs = SplitStringToVector(inf[3]," ");
@@ -88,10 +88,9 @@ void RInst::Parse_() {
 
     // get the target of the reaction
     i += 1;
-    if (i >= vs.size()) {
+    if (i >= inf.size()) {
         return; 
     }
-
     assert(inf[i] == "ON");
     i += 1;
     reaction_targets = SplitStringToVector(inf[i],",");

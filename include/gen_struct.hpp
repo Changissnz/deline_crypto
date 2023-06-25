@@ -3,7 +3,7 @@
 #include "gmech.hpp" 
 
 static std::vector<std::string> STD_NODE_LIST = {
-    "A","a","B","b","C","c","D","E","e",
+    "A","a","B","b","C","c","D","d","E","e",
     "F","f","G","g","H","h","I","i","J",
     "j","K","k","L","l","M","m","N","n",
     "O","o","P","p","Q","q","R","r","S",//

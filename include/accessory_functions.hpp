@@ -2,13 +2,9 @@
 #ifndef ACCESSORYFUNCTIONS_HPP
 #define ACCESSORYFUNCTIONS_HPP
 
-//#include "deline_md.hpp"
-//#include "modif_patterns.hpp"
 #include "randumb.hpp"
 #include <vector>
 #include <string>
-
-//#include "dmd_traveller.hpp"
 
 ////////////////////////////////
 
@@ -46,24 +42,7 @@ public:
         assert (l4da.size() == 3);
         assert (l5da.size() == 4);
 
-        /*
-        std::cout << "THE NUMBERS" << std::endl;
-        std::cout << "#1" << std::endl;
-        std::cout << l1da << std::endl;
-        std::cout << "#2" << std::endl;
-        std::cout << l2da << std::endl;
-        std::cout << "#3" << std::endl;
-        std::cout << l3da << std::endl;
-        std::cout << "#4" << std::endl;
-        std::cout << l4da << std::endl;
-        std::cout << "#5" << std::endl;
-        std::cout << l5da << std::endl;
-        std::cout << "THE NUMBERS" << std::endl;
-        std::cout << "THE NUMBERS" << std::endl;
-        */
-
         l1 = new LCG(int(l1da(0) % l),int(l1da(1)),int(l1da(2)),l);
-        //this->l1da = l1da;
         l3 = new LCG(int(l3da(0) % 2),int(l3da(1)),int(l3da(2)),2);
         l4 = new LCG(int(l4da(0) % 2),int(l4da(1)),int(l4da(2)),2);
         l5 = new LCG(int(l5da(0) % int(l5da(3))),int(l5da(1)),int(l5da(2)),int(l5da(3)));
@@ -71,9 +50,6 @@ public:
         this->l2da = l2da;
         //One();
         RunGens();
-        
-
-        std::cout << "BLANKINATTI" << std::endl;
     }
 
     void RunGens();
@@ -81,13 +57,6 @@ public:
     mat ModAtIndex(mat m2, ivec cind, int v1i);
     mat InsertionMod(mat rp);
     rowvec AMMod(mat rp);
-
-    /*
-    mat Output(mat m,mat m2,ivec cind); 
-    //mat ModAtIndex(mat m2, ivec cind, int v1i);
-    mat InsertionMod(mat rp);
-    rowvec AMMod(mat rp);
-    */ 
 };
 
 class SnakeModificationPattern {
@@ -116,7 +85,6 @@ public:
         assert (r1.size() == r2.size());
         assert(r1.size() == 5);
         assert(r3.size() == 4);
-        //&& r3.size() == r2.size());
 
         l1 = new LCG(int(r1(0)),int(r1(1)),int(r1(2)),int(r1(3)));
         l2 = new LCG(int(r2(0)),int(r2(1)),int(r2(2)),int(r2(3)));
@@ -125,13 +93,11 @@ public:
         s1 = r1(4);
         s2 = r2(4);
         s3 = r3(3);
-        //RunGens();
     }
 
     void RunGens();
     mat Output(mat m); 
     mat ModAtIndex(mat m, int i);
-
     mat Repeater(mat m, int i,bool pmode);
 };
 

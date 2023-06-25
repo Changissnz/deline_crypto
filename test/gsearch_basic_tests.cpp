@@ -116,7 +116,6 @@ TEST(GSearch_BFSOnNodeBestMPathsPerNode_Case2_Test,GSearch_BFSOnNodeBestMPathsPe
 
     GSearch gs = GSearch(&utg1);
     auto res = gs.BFSOnNodeBestMPathsPerNode("n0",5);
-    //cout << res->ToString();
 
     string s = "best paths for: n0\n\
 size: 1\n\

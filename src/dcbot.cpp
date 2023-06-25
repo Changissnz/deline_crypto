@@ -10,7 +10,7 @@ void DCBot::LoadFiles() {
     reactor = new Reactor(db);
 
     // load the input file
-    inputdr == new DataReader(inputf,DCMSG_BATCHSIZE);
+    inputdr = new DataReader(inputf,DCMSG_BATCHSIZE);
     if (load_stat) {
         return;
     }
@@ -18,6 +18,12 @@ void DCBot::LoadFiles() {
     fx1.open(outputf.first,ofstream::trunc);
     fx2.open(outputf.second,ofstream::trunc);
     load_stat = true;
+}
+
+void DCBot::Code() {
+    while (!inputdr->finished) {
+        CodeOneBatch();
+    }
 }
 
 
@@ -47,19 +53,19 @@ void DCBot::CodeOneLine(int i) {
     for (int j = 0; j < sx.size(); j++) {
         sx2 = sx.substr(j,1);
         auto outp = db->OneChar(sx2);
-
         WriteToOutF(outp.first);
 
         // perform reactions
         reactor->React(db,outp.second);
     }
+    fx2 << endl;
 }
 
 void DCBot::WriteToOutF(pair<mat,int> pms) {
-    vec msg = pms.first.as_row();
+    vec msg = conv_to<vec>::from(pms.first.as_row());
     string sx = IterableToString(msg,",") + ",";
     
-    fx1 << sx;
+    fx1 << sx << endl;
     fx2 << to_string(pms.second) + ",";
 }
 
@@ -67,18 +73,3 @@ void DCBot::Terminate() {
     fx1.close();
     fx2.close();
 }
-
-
-
-
-/*
-    ofstream fx;
-    fx.open(fp,ofstream::trunc);// ofstream::app); 
-    
-
-    for (auto c: nodes) {
-        fx << (c.second)->ToString() + "\n" + "$#$" + "\n" << endl;
-    }
-
-    fx.close(); 
-*/

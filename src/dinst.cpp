@@ -111,25 +111,41 @@ void DInst::MapMO(DMDTraveller* dt) {
     ///dt->ClearTravelData();
     */
 
+    /*
+    cout << "IQ:" << endl;
+    cout << inst_args[0] << endl;
+    cout << inst_args[1] << endl;
+    cout << inst_args[2] << endl;
+    cout << "QI" << endl;
+    */
+
     int nm = stoi(inst_args[0]); 
     int dmci = stoi(inst_args[1]);
     int d22i = stoi(inst_args[2]);
-
+    
+    ///cout << "after1" << endl;
     vector<string> vs_ = SplitStringToVector(inst_args[3], ".");
     vector<char> vs;
     for (auto vs1: vs_) {
         auto cs = vs1.c_str();
         vs.push_back(*cs);
     }
+    ///cout << "after2" << endl;
+
 
     vec av = NumStringToArmaVec(inst_args[4],"_");
-    bool b = stoi(inst_args[5]);
+    ///cout << "after3: " << inst_args[5] << endl;
+    bool b = !!stoi(inst_args[5]);
+    ///cout << "after4" << endl;
 
+    ///cout << "selecting d22 @: " << dmci << " " << d22i << endl;
     Deline22* d22 = dt->SelectD22(dmci,d22i); 
 
     for (int i = 0; i < nm; i++) {
+        ///cout << "moving one " << i << endl;
         dt->MoveOne(d22, d22->tindex, vs,av,b);
     }
+    ///cout << "done move" << endl;
 }
 
 /// ins := HOP 
@@ -138,10 +154,10 @@ void DInst::MapMO(DMDTraveller* dt) {
 /// -- example
 /// HOP,2,4,APRNGstring
 void DInst::MapHOP(DMDTraveller* dt) {
+    
     int dmci = stoi(inst_args[0]);
     int d22i = stoi(inst_args[1]);
     AbstractPRNG* aprng = APRNGFromString(inst_args[2]);
-
     Deline22* d22 = dt->SelectD22(dmci,d22i);
     int jx = (d22->del)->data.n_rows;
     int qx = d22->tindex + aprng->PRIntInRange(make_pair(0,jx));
@@ -157,6 +173,16 @@ DInst* DInst::Copy() {
 
     return new DInst(i1,i2);
 }
+
+string DInst::ToString() {
+    string s = ins + ",";
+    for (auto s_: inst_args) {
+        s += s_ + ",";
+    }
+    s = s.substr(0,s.size() -1);
+    return s;
+}
+
 
 ////////////////////////////////////////////////
 
@@ -192,6 +218,9 @@ void DInstSeq::ParseIntoDInst() {
 /// Saves the sequence generated. 
 void DInstSeq::Map(DMDTraveller* dt) {
     output.clear();// = (0,0,fill::zeros);
+    cout << "SEQ" << endl;
+    cout << ToString() << endl;
+    cout << "ENDSEQ" << endl;
 
     int i = 0;
     // run all the one_apply
@@ -231,6 +260,7 @@ int DInstSeq::MOPointSize(DMDTraveller* dt) {
     vector<DInst*> vdi = DInstCategory("MO");
     int ix = 0;
     for (auto dx: vdi) {
+        ///cout << "ps0: " << dx->inst_args[0] << endl;
         ix += stoi(dx->inst_args[0]);
     }
     return ix;
@@ -247,6 +277,7 @@ pair<mat,pair<mat,ivec>> DInstSeq::MOsequence(DMDTraveller* dt) {
     
     // get the number of points 
     int ix = MOPointSize(dt);
+    ///cout << "point size: " << ix << endl;
     assert(dt->travel_points.n_rows >= ix);
 
     // get the travel points
@@ -317,6 +348,19 @@ vector<DInst*> DInstSeq::DInstCategory(string category) {
     return vdi;
 }
 
+string DInstSeq::ToString() {
+    string sx = "\t-- ONE-APPLY\n";
+    for (auto oa: one_apply) {
+        sx += oa->ToString() + "\n";
+    }
+    sx += "\n";
+    sx += "\t-- ALL-APPLY\n";
+    for (auto oa: all_apply) {
+        sx += oa->ToString() + "\n";
+    }
+
+    return sx;
+}
 
 int MSKToInt(string msk) {
 

@@ -166,18 +166,7 @@ int DirectionToAxis(char d) {
 // integer to navigational direction
 string IntToNavDir(int i) {
     assert(i >= 0 && i <= 3);
-
-    if (i == 0) {
-        return "l";
-    } else if (i == 1) {
-        return "r";
-    } else if (i == 2) {
-        return "t";
-    } else if (i == 3) {
-        return "d";
-    }
-    assert(false);
-    return "X"; 
+    return STD_NAVDIR[i];
 }
 
 int NavDirToInt(char cx) {

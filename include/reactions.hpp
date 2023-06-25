@@ -30,4 +30,6 @@ DInst* SELECTDINST(DInstSeq* di, AbstractPRNG* aprng);
 /// modifies the permutation graph (UTGraph)
 void RTMODUTG(UTGSwapper* utgs,std::string command);
 
+std::pair<int,int> DMDIndicesFromAPRNG(DMDTraveller* dt, AbstractPRNG* aprng);
+
 #endif

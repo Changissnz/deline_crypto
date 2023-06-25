@@ -10,6 +10,7 @@
 ///
 DInstSeq* RTMODINSTR(DMDTraveller* dt, DInstSeq* di, std::string vs) {
 
+    cout << "MODINSTR" << endl;
     // declare the APRNG
     AbstractPRNG* aprng = APRNGFromString(vs);
     
@@ -23,6 +24,7 @@ DInstSeq* RTMODINSTR(DMDTraveller* dt, DInstSeq* di, std::string vs) {
         pair<int,int> pf = (sz <= 1) ? make_pair(0,3): make_pair(0,4);
         int mt = aprng->PRIntInRange(pf);
 
+        cout << "modifying " << mt << endl;
         // case: PERM
         if (mt == 0) {
             PERMUTEDINST(di,aprng);
@@ -119,7 +121,7 @@ void MODIFYDINST(DMDTraveller* dt,DInstSeq* di, AbstractPRNG* aprng) {
 /// *see the comment for `MODIFYDINST` for information on the aprng limits
 ///  for each var<ins>*
 void MODIFYDINST_(DMDTraveller* dt,DInst* dx, AbstractPRNG* aprng) {
-    
+    cout << "DXINS: " << dx->ins << endl;
     if (dx->ins == "MO") {
         MODIFY_TYPEMO(dt,dx,aprng);
     } else if (dx->ins == "MSK") {
@@ -135,13 +137,14 @@ void MODIFYDINST_(DMDTraveller* dt,DInst* dx, AbstractPRNG* aprng) {
 ///  for each var<ins>*
 void MODIFY_TYPEMO(DMDTraveller* dt,DInst* dx, AbstractPRNG* aprng) {
     // get the info for `dt`, used for modulation.
-    pair<int,map<int,int>> pim = dt->Info();
+    ///pair<int,map<int,int>> pim = dt->Info();
 
     // modify the number of moves
     int i1 = aprng->PRIntInRange(make_pair(1,25));
     dx->inst_args[0] = to_string((i1 + stoi(dx->inst_args[0])) % 25);
     
     // modify the index
+    /*
     int i2 = aprng->PRIntInRange(make_pair(1,pim.first));
     i2 = (i2 + stoi(dx->inst_args[1])) % pim.first;
     dx->inst_args[1] = to_string(i2);
@@ -150,6 +153,10 @@ void MODIFY_TYPEMO(DMDTraveller* dt,DInst* dx, AbstractPRNG* aprng) {
     int i3 = aprng->PRIntInRange(make_pair(1,pim.second[i2]));
     i3 = (i3 + stoi(dx->inst_args[2])) % pim.second[i2];
     dx->inst_args[2] = to_string(i3);
+    */
+    pair<int,int> pi = DMDIndicesFromAPRNG(dt,aprng);
+    dx->inst_args[1] = to_string(pi.first);
+    dx->inst_args[2] = to_string(pi.second);
 
     // get the `x` number of elements for directional
     int i4 = aprng->PRIntInRange(make_pair(2,20));
@@ -182,7 +189,7 @@ void MODIFY_TYPEMO(DMDTraveller* dt,DInst* dx, AbstractPRNG* aprng) {
     dx->inst_args[4] = svs;
 
     int i7 = aprng->PRIntInRange(make_pair(0,1));
-    dx->inst_args[5] = i7;
+    dx->inst_args[5] = to_string(i7);
 
     /// TODO: record `dx` args into APRNG
 }
@@ -227,6 +234,7 @@ void MODIFY_TYPEBG(DMDTraveller* dt,DInst* dx, AbstractPRNG* aprng) {
     dx->inst_args[1] = to_string((i2 + stoi(dx->inst_args[1])) % 25);
 
     // modify the indices
+    /*
     pair<int,map<int,int>> pim = dt->Info();
     
         // modify the index
@@ -238,6 +246,10 @@ void MODIFY_TYPEBG(DMDTraveller* dt,DInst* dx, AbstractPRNG* aprng) {
     int i4 = aprng->PRIntInRange(make_pair(1,pim.second[i3]));
     i4 = (i4 + stoi(dx->inst_args[3])) % pim.second[i3];
     dx->inst_args[3] = to_string(i4);
+    */
+    pair<int,int> pi = DMDIndicesFromAPRNG(dt,aprng);
+    dx->inst_args[2] = to_string(pi.first);
+    dx->inst_args[3] = to_string(pi.second);
 
     // modify the magnitudes
     vector<string> vs = SplitStringToVector(dx->inst_args[4],"_");
@@ -254,19 +266,34 @@ void MODIFY_TYPEBG(DMDTraveller* dt,DInst* dx, AbstractPRNG* aprng) {
 void MODIFY_TYPEHOP(DMDTraveller* dt,DInst* dx, AbstractPRNG* aprng) {
 
     // modify the indices
+    /*
     pair<int,map<int,int>> pim = dt->Info();
-    
+    cout << "HOP1" << endl;
+
         // modify the index
     int i1 = aprng->PRIntInRange(make_pair(1,pim.first));
     i1 = (i1 + stoi(dx->inst_args[0])) % pim.first;
     dx->inst_args[0] = to_string(i1);
 
+    cout << "HOP2" << endl;
+
         // modify the next index
+    cout << "PIM.SECOND: " << pim.second[i1] << endl;
     int i2 = aprng->PRIntInRange(make_pair(1,pim.second[i1]));
     i2 = (i2 + stoi(dx->inst_args[1])) % pim.second[i1];
     dx->inst_args[1] = to_string(i2);
-    
+    */
+    ////////////////////
+    pair<int,int> pi = DMDIndicesFromAPRNG(dt,aprng);
+    dx->inst_args[0] = to_string(pi.first);
+    dx->inst_args[1] = to_string(pi.second);
+
+    cout << "HOP3" << endl;
+    cout << "[0]" << dx->inst_args[0] << endl;
+    cout << "[1]" << dx->inst_args[1] << endl;
+
     // modify the aprng string
+    cout << "MOD APRNG" << endl;
     dx->inst_args[2] = APRNGStringArgsDeltaScheme1(dx->inst_args[2],aprng);
 }
 
@@ -361,4 +388,19 @@ DInst* SELECTDINST(DInstSeq* di, AbstractPRNG* aprng) {
 
 void RTMODUTG(UTGSwapper* utgs,string command) {
     utgs->CommandSwap(command);
+}
+
+pair<int,int> DMDIndicesFromAPRNG(DMDTraveller* dt, AbstractPRNG* aprng) {
+
+    pair<int,map<int,int>> pim = dt->Info();
+    vector<int> vi;
+    for (auto pim_: pim.second) {
+        vi.push_back(pim_.first);
+    }
+
+    int i1 = aprng->PRIntInRange(make_pair(0,pim.first - 1));
+    i1 = vi[i1];
+    int i2 = aprng->PRIntInRange(make_pair(0,pim.second[i1] - 1));
+    cout << "numbersbefore: " << i1 << " " << i2 << endl;
+    return make_pair(i1,i2);
 }

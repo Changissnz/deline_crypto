@@ -36,9 +36,11 @@ void Reactor::ReactOne(DBot* db, RInst* ri,pair<string,string> output) {
 
     /// get reaction decision
     bool stat = ri->ReactDecision(db->dmdt,db->mcd[output.second],output.first); 
+    //cout << "react is " << stat << endl;
 
     /// case: reaction by MODINSTR
     if (stat && (ri->reaction_args[0] == "MODINSTR")) {
+        //cout << "react on targets" << endl;
         ReactOnTargets(db,ri);
         return;
     } 
@@ -50,8 +52,10 @@ void Reactor::ReactOne(DBot* db, RInst* ri,pair<string,string> output) {
 }
 
 void Reactor::ReactOnTargets(DBot* db, RInst* ri) {
-
+    //cout << "reacting on: " << endl;
+    //cout << "reaction targets len: " << ri->reaction_targets.size() << endl; 
     for (auto rt: ri->reaction_targets) {
+        cout << "RT: " << rt << endl;
         DInstSeq* dis = RTMODINSTR(db->dmdt, (db->mcd)[rt], ri->reaction_args[1]);
         db->mcd[rt] = dis;
     }

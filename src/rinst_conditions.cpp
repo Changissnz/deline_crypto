@@ -75,7 +75,7 @@ ivec C1__IN_BOUNDS_OF_DELINEATION_(DMDTraveller* dmdt,DInstSeq* di) {
 ///   iteration of S terminates at the length of P. 
 /// 
 /// * example *
-///     +-/*+-++, 4, 2_3
+///     +-/*+-++, 4,2_3
 bool C2__ARITHMETICSEQ_IN_MOD_RANGE(DMDTraveller* dmdt, DInstSeq* di,string desc) {
     vec vx = C2__ARITHMETICSEQ_IN_MOD_RANGE_(dmdt,di,desc);
     vector<string> vs = SplitStringToVector(desc,",");
@@ -141,7 +141,6 @@ bool C3__POINTSEQ_INTERSECTS_W_PREVIOUS_SPAN(DMDTraveller* dmdt,DInstSeq* di,str
 }
 
 ivec C3__POINTSEQ_INTERSECTS_W_PREVIOUS_SPAN_(DMDTraveller* dmdt,DInstSeq* di) {
-
     mat pseq = (di->MOsequence(dmdt)).first;
 
     // get the previous point-sequence of equal length to pseq
@@ -153,9 +152,9 @@ ivec C3__POINTSEQ_INTERSECTS_W_PREVIOUS_SPAN_(DMDTraveller* dmdt,DInstSeq* di) {
     double max2 = m2.col(1).max();
 
     vector<int> vi;
-    for (int i = 0; i < m2.n_rows; i++) {
-        bool stat1 = (m2(i,0) >= min1) && (m2(i,0) <= max1);
-        bool stat2 = (m2(i,1) >= min2) && (m2(i,1) <= max2);
+    for (int i = 0; i < pseq.n_rows; i++) {
+        bool stat1 = (pseq(i,0) >= min1) && (pseq(i,0) <= max1);
+        bool stat2 = (pseq(i,1) >= min2) && (pseq(i,1) <= max2);
         vi.push_back(int(stat1 && stat2));
     }
 
@@ -263,7 +262,7 @@ mat PreviousSequence(DMDTraveller* dmdt,int l) {
     
     // case: no previous points
     if (e == -1) {
-        mat m(0,0,fill::zeros);
+        mat m = {{0,0}};
         return m; 
     }
 
@@ -275,31 +274,44 @@ mat PreviousSequence(DMDTraveller* dmdt,int l) {
     return IndiceRangeToSubArmaMat(dmdt->travel_points,make_pair(s,e));
 }
 
+/// *format of the descriptor*
+///     d_b_f0
+///
+/// d is a direction of l,r,t,or b 
+/// b is a integer boolean
+/// f0 is the float threshold, min if b is 1 otherwise max.
 bool C6__BOOLEAN_DELTA_MEASURE_ALONG_AXIS(DMDTraveller* dmdt,DInstSeq* di,string desc) {
 
     vector<string> vs = SplitStringToVector(desc,"_");
 
-    assert(vs.size() == 2);
+    assert(vs.size() == 3);
     char d = *(vs[0].c_str());
     bool f1 = stoi(vs[1]);
     float f2 = stof(vs[2]);
-    ivec vi = C6__BOOLEAN_DELTA_MEASURE_ALONG_AXIS(dmdt,di,d);
-    float f = (vi.size() == 0) ? 0 : (accu(vi) / vi.size());
-
+    cout << "getting boolean delta" << endl;
+    float vi = C6__BOOLEAN_DELTA_MEASURE_ALONG_AXIS(dmdt,di,d);
+    cout << "GOT IT" <<  endl;
     if (f1) {
-        return (f >= f2);
+        return (vi >= f2);
     }
 
-    return (f <= f2);
+    return (vi <= f2);
 }
 
-ivec C6__BOOLEAN_DELTA_MEASURE_ALONG_AXIS(DMDTraveller* dmdt,DInstSeq* di,char direction) {
+float C6__BOOLEAN_DELTA_MEASURE_ALONG_AXIS(DMDTraveller* dmdt,DInstSeq* di,char direction) {
     mat pseq = (di->MOsequence(dmdt)).first;
-    return JaggedEdges(pseq,direction); 
+    if (pseq.n_rows == 0) {
+        return 0.; 
+    }
+
+    colvec cx(pseq.n_rows,fill::zeros); 
+    pseq.insert_cols(2,cx);
+    return float(JaggedEdges(pseq,direction).size()) / float(pseq.n_rows); 
 }
 
 bool RCONDITIONAL(DMDTraveller* dmdt, DInstSeq* di,string conditional_id, string desc) {
-
+    //cout << "conditional id: " << conditional_id << endl;
+    //cout << "desc: " << desc << endl;
     assert(possible_conds.find(conditional_id) != possible_conds.end());
 
     if (conditional_id == "C1") {

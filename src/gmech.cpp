@@ -6,7 +6,6 @@ UTNode* UTNode::PartialCopy() {
     return new UTNode(c,iidt);
 }
 
-
 // deletes one <UTNode*> from `neighbors` based on its identifier `c`.
 void UTNode::DeleteNeighbor(string nid) {
     int i = -1;
@@ -227,31 +226,8 @@ int UTGraph::MaxNodeDegree() {
     vector<int> y;
     for (auto c: nodes) {
         y.push_back((c.second)->neighbors.size());
-        /*
-        cout << "DEG OF " << c.first << " " << (c.second)->neighbors.size() << endl;
-        //int y = (c.second)->neighbors.size();
-        if ((c.second)->neighbors.size() > x) {
-            cout << "YES" << endl;
-            x = (c.second)->neighbors.size();
-        }
-
-        cout << "AFTER CHECK " << x << endl;
-        */
     }
 
     ivec yz = conv_to<ivec>::from(y);
     return yz.max();
 }
-
-/*
-float UTGraph::CumulativeTokenDistanceMeasure() {
-    vector<string,pair<string,float>> vs; 
-    
-    for (auto c: nodes) {
-        vector<string> vs2 = NodesOfToken(c->first);
-
-    }    
-}
-*/
-
-

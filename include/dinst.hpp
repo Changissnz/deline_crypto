@@ -27,6 +27,7 @@ public:
     void MapMO(DMDTraveller* dt);
     void MapHOP(DMDTraveller* dt);
     DInst* Copy();
+    std::string ToString();
 };
 
 class DInstSeq {
@@ -50,6 +51,8 @@ public:
 
     std::pair<mat,std::pair<mat,ivec>> MOsequence(DMDTraveller* dt);
     std::vector<DInst*> DInstCategory(std::string category);
+
+    std::string ToString();
 };
 
 int MSKToInt(std::string msk);

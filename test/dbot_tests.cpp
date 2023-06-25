@@ -27,7 +27,7 @@ TEST(DBot__OneChar__Case1_Test, DBot__OneChar__Case1_Test_Correct) {
     db->LoadFiles();
 
     string sx = "this is a message";
-    for (int i = 0; i < sx.size() - 1; i++) {
+    for (int i = 0; i < sx.size(); i++) {
         string sx2 = sx.substr(i,1);
         db->OneChar(sx2);
     }

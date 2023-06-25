@@ -268,9 +268,12 @@ void DMDTraveller::JitterDeline22(Deline22* d22, vec v,function<void (Deline22*,
 /// 
 rowvec DMDTraveller::MoveOne(Deline22* d22, int index, vector<char> directions,vec pointPace,bool assignToClosest) {
     rowvec v = MoveOnePoint_(d22, index, directions,pointPace);
+    ///cout << "point " << v << endl;
     int j = d22->IndexOfClosestPoint(v);
+    ///cout << "closest point index: " << j << endl;
     d22->tindex = j;
     if (assignToClosest) {
+        ///cout << "\t-- assign closest" << endl;
         travel_points.insert_rows(travel_points.n_rows, d22->data.row(j));
         return d22->data.row(j);
     }

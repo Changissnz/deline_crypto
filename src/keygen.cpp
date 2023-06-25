@@ -275,12 +275,17 @@ void KeyGen::OutANYTIME() {
     vector<string> vs = {"ANYTIME"};
 
         // get the condition
-    string vs2 = OutCONDITION();
-    vs.push_back(vs2);
+    pair<string,string> cx = OutCONDITION();
+    vs.push_back(cx.second);
+    // conditional args
+    vs.push_back(OutCONDITIONALDESC(cx.first));
 
+    /*
     // generate a random APRNG
     vs2 = APRNGStringFromAPRNG(rg1);
     vs.push_back(vs2);
+    */
+
     vector<string> vs3 = OutTAKEREACTIONAS(); 
     copy(vs3.begin(), vs3.end(), back_inserter(vs));
     rkey_genrd.push_back(vs);
@@ -302,24 +307,89 @@ void KeyGen::OutFOR() {
     vector<string> vs = {vs2};
     
     vs2 = "IF ";
-    vs2 += OutCONDITION();
+    pair<string,string> cx = OutCONDITION(); 
+    vs2 += cx.second;
     vs.push_back(vs2);
-    
+
+    // conditional args
+    vs.push_back(OutCONDITIONALDESC(cx.first));
+    /*
     // generate an aprng string
     vs2 = APRNGStringFromAPRNG(rg1);
     vs.push_back(vs2);
+    */
 
     vector<string> vs3 = OutTAKEREACTIONAS(); 
     copy(vs3.begin(), vs3.end(), back_inserter(vs));
     rkey_genrd.push_back(vs);
 }
 
-string KeyGen::OutCONDITION() {
+pair<string,string> KeyGen::OutCONDITION() {
     string s = "COND ";
     int i = rg1->PRIntInRange(make_pair(1,possible_conds.size()));
-    s += "C" + to_string(i);
+    string cx = "C" + to_string(i);
+    s += cx; 
     s += " W/";
-    return s;
+    return make_pair(cx,s);
+}
+
+string KeyGen::OutCONDITIONALDESC(string desc) {
+    assert(possible_conds.find(desc) != possible_conds.end());
+
+    if (desc == "C1") {
+        return OutRANGE();
+    } else if (desc == "C2") {
+        return OutCONDITIONALARITHMETIC();
+    } else if (desc == "C3") {
+        return OutRANGE(); 
+    } else if (desc == "C4") {
+        string sx = OutRANGE();
+        string b = to_string(rg1->PRIntInRange(make_pair(0,1)));
+        return b + "_" + sx;
+    } else if (desc == "C5") {
+        int b = rg1->PRIntInRange(make_pair(0,1));
+        float f = rg1->PRFloatInRange(make_pair(0.,1.),5);
+        return to_string(b) + "_" + to_string(f);
+    } 
+
+    int di = rg1->PRIntInRange(make_pair(0,3));
+    string dix = STD_NAVDIR[di]; 
+    int b = rg1->PRIntInRange(make_pair(0,1));
+    float f = rg1->PRFloatInRange(make_pair(0.,1.),5);
+    return dix + "_" + to_string(b) + "_" +
+        to_string(f);
+}
+
+/// generates
+/// [0] 2-12 operators.
+/// [1] modulo between 512 and 1024
+/// [2] modulo range r0_r1 w/ values b/t 0 and modulo
+string KeyGen::OutCONDITIONALARITHMETIC() {
+    int l = rg1->PRIntInRange(make_pair(2,12));
+    string sx;
+    int l2; 
+    for (int i = 0; i< l; i++) {
+        l2 = rg1->PRIntInRange(make_pair(0,3));
+        sx += STD_ARITHMETIC_OPS[l2];
+    }
+
+    // generate modulo
+    int m = rg1->PRIntInRange(make_pair(512,1024));
+
+    // generate modulo range
+    int r0 = rg1->PRIntInRange(make_pair(0,m)); 
+    int r1 = rg1->PRIntInRange(make_pair(r0,m));
+
+    sx += "," + to_string(m) + ",";
+    sx += to_string(r0) + "_" + to_string(r1);
+
+    return sx;
+}
+
+string KeyGen::OutRANGE() {
+    float l = rg1->PRFloatInRange(make_pair(0.,1.),5);
+    float l2 = rg1->PRFloatInRange(make_pair(l,float(1.)),5);
+    return to_string(l) + "_" + to_string(l2);
 }
 
 ///         * format*

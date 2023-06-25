@@ -23,7 +23,7 @@ bool C5__SEQUENTIAL_EUCLIDEAN_DISTANCE_MEASURE(DMDTraveller* dmdt,DInstSeq* di,s
 float C5__SEQUENTIAL_EUCLIDEAN_DISTANCE_MEASURE_(DMDTraveller* dmdt,DInstSeq* di);
 
 bool C6__BOOLEAN_DELTA_MEASURE_ALONG_AXIS(DMDTraveller* dmdt,DInstSeq* di,std::string desc);
-ivec C6__BOOLEAN_DELTA_MEASURE_ALONG_AXIS(DMDTraveller* dmdt,DInstSeq* di, char direction);
+float C6__BOOLEAN_DELTA_MEASURE_ALONG_AXIS(DMDTraveller* dmdt,DInstSeq* di, char direction);
 
 mat PreviousSequence(DMDTraveller* dmdt,int l);
 
