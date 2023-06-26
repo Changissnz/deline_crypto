@@ -23,7 +23,6 @@ rowvec DCurve::Second() {
 
 vec DCurve::Ext0() {
     vec v = {First()(0),Second()(0)};
-    //cout << "V" << v << endl; 
     return {v.min(),v.max()};
 }
 
@@ -33,12 +32,9 @@ vec DCurve::Ext1() {
 }
 
 float DCurve::Fit(float x) {
-    //cout << "FF " << x << endl;
     vec v = Ext0();
-    //cout << "VV " << v << endl;
     assert (RoundDecimalNPlaces(x,5) >= RoundDecimalNPlaces(v(0),5)
         && RoundDecimalNPlaces(x,5) <= RoundDecimalNPlaces(v(1),5));        
-    //cout << "FITTING " << endl; 
     return f->Fit(x);
 }
 
@@ -46,7 +42,6 @@ float DCurve::YFit(float y) {
     vec v = Ext1();
     assert (RoundDecimalNPlaces(y,5) >= RoundDecimalNPlaces(v(0),5)
          && RoundDecimalNPlaces(y,5) <= RoundDecimalNPlaces(v(1),5));
-    //cout << "* fitting " << y << endl;
     return f->YFit(y);
 }
 

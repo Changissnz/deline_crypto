@@ -310,8 +310,6 @@ float C6__BOOLEAN_DELTA_MEASURE_ALONG_AXIS(DMDTraveller* dmdt,DInstSeq* di,char 
 }
 
 bool RCONDITIONAL(DMDTraveller* dmdt, DInstSeq* di,string conditional_id, string desc) {
-    //cout << "conditional id: " << conditional_id << endl;
-    //cout << "desc: " << desc << endl;
     assert(possible_conds.find(conditional_id) != possible_conds.end());
 
     if (conditional_id == "C1") {

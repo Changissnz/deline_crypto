@@ -54,15 +54,12 @@ public:
 
     void AddSwap(std::string n1, std::string n2,std::pair<int,int> pi,bool of_interest) {
         if (record) {
-            ///cout << "\t\t\tpushing vp" << endl;
             vp.push_back(make_pair(make_pair(n1,n2),pi));
             if (of_interest) {
-                ///cout << "\t\t\tIOI" << endl;
                 ioi.push_back(vp.size() - 1);
             }
         }
         Increment();
-        ///cout << "after increment" << endl;
     }
 
     void Increment() {

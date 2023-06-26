@@ -177,7 +177,6 @@ void UTComponentGraph::ProcessUGModule(UGModule* ugm) {
     key_index.clear();
 
     // add a node for each component
-    ///cout << "adding node for each component" << endl;
     int sz = ugm->fm.size();
     for (int i = 0; i < sz; i++) {
         utg->AddNode(make_pair(to_string(i),"t"));
@@ -205,7 +204,6 @@ pair<bool,pair<int,int>> UTComponentGraph::PairwiseComponentConnectivity(UGModul
 
     for (auto a1: q1) {
         for (auto a2: q2) {
-            ///cout << "nodes " << a1 << " " << a2 << endl;
             if ((ugm->utg)->nodes[a1]->IsNeighbor(a2)) {
                 score.first = score.first + 1;
                 stat = true;

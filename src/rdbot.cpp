@@ -36,7 +36,6 @@ void Reactor::ReactOne(DBot* db, RInst* ri,pair<string,string> output) {
 
     /// get reaction decision
     bool stat = ri->ReactDecision(db->dmdt,db->mcd[output.second],output.first); 
-    //cout << "react is " << stat << endl;
 
     /// case: reaction by MODINSTR
     if (stat && (ri->reaction_args[0] == "MODINSTR")) {

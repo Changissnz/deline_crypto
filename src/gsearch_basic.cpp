@@ -405,7 +405,6 @@ float GInfo::N2NDistance(string n1,string n2) {
 GInfo* GSearch::RunGInfo() {
     map<string,BestPaths*> nbp;
     for (auto ns: utg->nodes) {
-        ///cout << "best path for node: " << ns.first << endl; 
         nbp[ns.first] = BFSOnNodeBestMPathsPerNode(ns.first,5);
     }
 

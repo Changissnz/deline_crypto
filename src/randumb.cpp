@@ -47,6 +47,8 @@ vector<float> StdRandGenerator::CycleOne(bool floatgen,int max_size) {
     bool stat = true;
     float i;
 
+    cout << "PFR: " << pfr.first << " " << pfr.second << endl;
+
     if (!floatgen) {
         i = float(PRIntInRange(make_pair(pfr.first,pfr.second)));
     } else {

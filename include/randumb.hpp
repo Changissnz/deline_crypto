@@ -72,8 +72,6 @@ public:
     int m;
 
     LCG(int start_int, int multiplier, int additive, int modulus) : AbstractPRNG() {
-        //cout << "START_INT"
-        //assert (start_int < modulus && start_int >= 0);
         si = start_int % modulus;
         six = si;
         mu = multiplier;

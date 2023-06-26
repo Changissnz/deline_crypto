@@ -2,7 +2,7 @@
 #define DCBOT_HPP
 
 #include "rdbot.hpp"
-
+#include "randumb_check.hpp"
 static int DCMSG_BATCHSIZE = 50;
 
 class DCBot {

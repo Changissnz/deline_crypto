@@ -115,11 +115,6 @@ vector<pair<string,pair<int,int>>> SortSwapScoresType1(vector<pair<string,pair<i
     sort(sv.begin(),sv.end(), [](pair<string,pair<int,int>> l, pair<string,pair<int,int>> r)
     {
 
-        //cout << "\t\tSORTING" << endl; 
-        //cout << l.first << "|" << l.second.first << "," << l.second.second << endl;
-        //cout << r.first << "|" << r.second.first << "," << r.second.second << endl;
-
-
         /// VARIANT:
         if (l.first == r.first) {
             return false;

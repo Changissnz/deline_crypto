@@ -111,27 +111,16 @@ void DInst::MapMO(DMDTraveller* dt) {
     ///dt->ClearTravelData();
     */
 
-    /*
-    cout << "IQ:" << endl;
-    cout << inst_args[0] << endl;
-    cout << inst_args[1] << endl;
-    cout << inst_args[2] << endl;
-    cout << "QI" << endl;
-    */
-
     int nm = stoi(inst_args[0]); 
     int dmci = stoi(inst_args[1]);
     int d22i = stoi(inst_args[2]);
     
-    ///cout << "after1" << endl;
     vector<string> vs_ = SplitStringToVector(inst_args[3], ".");
     vector<char> vs;
     for (auto vs1: vs_) {
         auto cs = vs1.c_str();
         vs.push_back(*cs);
     }
-    ///cout << "after2" << endl;
-
 
     vec av = NumStringToArmaVec(inst_args[4],"_");
     ///cout << "after3: " << inst_args[5] << endl;
@@ -260,7 +249,6 @@ int DInstSeq::MOPointSize(DMDTraveller* dt) {
     vector<DInst*> vdi = DInstCategory("MO");
     int ix = 0;
     for (auto dx: vdi) {
-        ///cout << "ps0: " << dx->inst_args[0] << endl;
         ix += stoi(dx->inst_args[0]);
     }
     return ix;
@@ -277,7 +265,6 @@ pair<mat,pair<mat,ivec>> DInstSeq::MOsequence(DMDTraveller* dt) {
     
     // get the number of points 
     int ix = MOPointSize(dt);
-    ///cout << "point size: " << ix << endl;
     assert(dt->travel_points.n_rows >= ix);
 
     // get the travel points

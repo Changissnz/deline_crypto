@@ -76,7 +76,6 @@ mat IndicesToComplementarySubArmaMat(mat m, ivec i) {
     int z = 0;
     int k = 0;
     for (int j = 0; j < m.n_rows; j++) {
-        //cout << "IZ " << i(z) << " " << j << " " << k << endl;
         if (z < i.size()) {
             if (i(z) == j) {
                 z += 1;

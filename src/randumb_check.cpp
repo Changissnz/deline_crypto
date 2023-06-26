@@ -7,6 +7,12 @@ float POINT_RADIUS_RATIO = 0.005;
 float CoverageOfSequence(vec vf, std::pair<float,float> fr,float pr) {
     assert (fr.second > fr.first);
     vector<pair<float,float>> vpf = NonIntersectingActivationRangesOfPointSequence(vf,fr,pr);
+    
+    cout << "non-intersecting ranges: " << endl;
+    for (auto vpf_: vpf) {
+        cout << vpf_.first << " " << vpf_.second << endl;
+    }
+    cout << "--------" << endl;
     float fx = 0;
 
     for (auto vpf_: vpf) {
@@ -29,18 +35,58 @@ vector<pair<float,float>> NonIntersectingActivationRangesOfPointSequence(vec vf,
 
     vector<pair<float,float>> vfx;
     pair<float,float> bs;
+    vf = unique(vf);
+    cout << "unique" << endl;
 
     for (auto vf_: vf) {
         vec f1 = {vf_ - pr,fr.first};
         vec f2 = {vf_ + pr,fr.second};
         bs = make_pair(f1.max(),f2.min());
+        cout << "next: " << vf_ << endl;
         
+        ///bs.first << "|" << bs.second << endl;
+
         // check for intersection w/ the previous
         if (vfx.size() > 0) {
             bs = CorrectIntersectingRanges(vfx[vfx.size() - 1],bs);
         }
 
         vfx.push_back(bs);
+    }
+
+    // trim the boundary ranges
+        // min boundary 
+    int j = 0;
+    float fx = 0;
+    for (int i = 0; i < vfx.size(); i++) {
+        if (vfx[i].first == fr.first) {
+            j = i;
+            fx = vfx[i].second;
+            continue;
+        }
+        break;
+    }
+        // case: duplicate ranges containing min of `fr`
+    if (j > 0) {
+        vfx.erase(vfx.begin(),vfx.begin() + j + 1);
+        vfx.insert(vfx.begin(), make_pair(fr.first,fx));
+    }
+
+        // max boundary
+    j = -1;
+    fx = 0;
+    for (int i = 0; i < vfx.size(); i++) {
+        if (vfx[i].second == fr.second) {
+            j = i;
+            fx = vfx[i].first;
+            break;
+        }
+    }
+
+        // case: duplicate ranges containing max of `fr`
+    if (j != vfx.size() - 1) {
+        vfx.erase(vfx.begin() + j,vfx.end());
+        vfx.insert(vfx.end(),make_pair(fx,fr.second));
     }
 
     return vfx;
@@ -51,10 +97,18 @@ vector<pair<float,float>> NonIntersectingActivationRangesOfPointSequence(vec vf,
 ///
 /// CAUTION: method designed for use w/ `NonIntersectingActivationRangesOfPointSequence`.
 pair<float,float> CorrectIntersectingRanges(pair<float,float> f1,pair<float,float> f2) {
+    cout << "correcting: " << endl;
+    cout << "\tF1: " << f1.first << "|" << f1.second << endl;
+    cout << "\tF2: " << f2.first << "|" << f2.second << endl;
 
     if (f2.first >= f1.first && f2.first <= f1.second) {
         f2.first = f1.second;
+    } else if (f2.first < f1.first) {
+        f2.first = f1.second; 
     }
+
+    cout << "\tF2_: " << f2.first << "|" << f2.second << endl;
+
 
     return f2;
 }
@@ -110,12 +164,13 @@ float MaxUWPD(pair<float,float> fr, int vs) {
 /// - ordering
 void APRNGGauge::MeasureCycle(bool floatgen) {
     vec vf = conv_to<vec>::from(CycleOne(floatgen));
-    vec vf2 = unique(vf);
+    vf = unique(vf);
+    cout << "vec is: " << vf << endl;
     if (point_radius == 0.) {
         DefaultSetRadius(vf);
     }
 
-    float f1 = CoverageOfSequence(vf2,fr,point_radius);
+    float f1 = CoverageOfSequence(vf,fr,point_radius);
     float f2 = NormalizedUWPD(vf,fr);
     rowvec rx = {f1,f2}; 
     cycle_scores.insert_rows(cycle_scores.n_rows,rx);

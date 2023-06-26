@@ -83,7 +83,6 @@ void JPMomentum(Deline22* d,AbstractPRNG* aprng, vec iv) {
     // iterate through the data container of d
     int x = (d->data).n_rows;
     for (int i = 0; i < x; i++) {
-        ///cout << "ADDING MOMENTUM " << iv << endl;
         rowvec rv = {d->data(i,0) + iv(0),d->data(i,1) + iv(1),d->data(i,2)}; 
         (d->data).row(i) = rv;
         iv = ModifyMomentum(d, aprng, iv,i);
@@ -182,7 +181,6 @@ void DMDTraveller::AlterDeline22VertexPointsOfEdge(Deline22* d22, char direction
         return;
     }
 
-    //cout << "1. number of rows " << mt1.n_rows << endl;
     rowvec p = mt1.row(mt1.n_rows - 1);
 
     set<char> tl = {'t','l'};

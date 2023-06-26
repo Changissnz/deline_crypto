@@ -9,8 +9,6 @@ std::pair<float,float> ScoreAPRNG();
 float CoverageOfSequence(vec vf, std::pair<float,float> fr,float pr);
 std::vector<std::pair<float,float>> NonIntersectingActivationRangesOfPointSequence(vec vf, std::pair<float,float> fr,float pr);
 std::pair<float,float> CorrectIntersectingRanges(std::pair<float,float> f1,std::pair<float,float> f2);
-//std::vector<std::pair<float,float>> NonIntersectingActivationRangesOfPointSequence(std::vector<float> vf, std::pair<float,float> fr,float pr);
-//std::pair<float,float> CorrectIntersectingRanges(std::pair<float,float> f1,std::pair<float,float> f2);
 
 /// functions used to gauge ordering
 float UnidirectionalWeighedPairwiseDistance(vec v);
@@ -32,6 +30,9 @@ public:
     float reference;
     bool init;
 
+    // two columns
+    // [0]: cycle coverage
+    // [1]: unidirectional weighted point distance measure
     mat cycle_scores;
 
     APRNGGauge(AbstractPRNG* aprng, std::pair<float,float> fr, float point_radius = 0.) {
