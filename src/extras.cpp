@@ -258,11 +258,6 @@ std::pair<float,float> QuadraticFormula(float a, float b, float c) {
     }
 
     float s2 = sqrt(powf(b,2.) - (4. * a * c));
-    cout << "S22: " << s2 << endl; 
-    cout << "B^2: " << powf(b,2.) << " | 4AC: " << (4 * a * c) << endl;
-    cout << "PRE-OP: " << powf(b,2.) - (4. * a * c) << endl; 
-    cout << "OP: " << sqrt(powf(b,2.) - (4. * a * c)) << endl;
-
     float p1 = (-1 * b + s2) / (2 * a);
     float p2 = (-1 * b - s2) / (2 * a);
     return make_pair(p1,p2);

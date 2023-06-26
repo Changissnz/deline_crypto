@@ -58,6 +58,8 @@ void DCBot::CodeOneLine(int i) {
         // perform reactions
         reactor->React(db,outp.second);
     }
+    
+    fx1 << endl;
     fx2 << endl;
 }
 
@@ -65,7 +67,7 @@ void DCBot::WriteToOutF(pair<mat,int> pms) {
     vec msg = conv_to<vec>::from(pms.first.as_row());
     string sx = IterableToString(msg,",") + ",";
     
-    fx1 << sx << endl;
+    fx1 << sx;
     fx2 << to_string(pms.second) + ",";
 }
 

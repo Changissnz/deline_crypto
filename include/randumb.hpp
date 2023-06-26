@@ -17,13 +17,8 @@ bool BoundsInBounds(std::pair<C,C> r1,std::pair<C,C> r2) {
     (r1.second >= r2.first && r1.second <= r2.second);
 }
 
-
 int ScaleIntRangeToRange(int x, std::pair<int,int> r1,std::pair<int,int> r2);
 float ScaleFloatRangeToRange(float x, std::pair<float,float> r1,std::pair<float,float> r2,int decimalLength);
-//std::set<int> LCGSetForSize();
-//int LCGCountForSize();
-//float MeanLCGCountForSizeVec(ivec szv);
-//std::vector<std::string> SplitStringToVector(std::string s, const char* delimiter);
 
 class AbstractPRNG {
 
@@ -36,6 +31,7 @@ public:
     virtual int PRIntInRange(std::pair<int,int> r)=0;
     virtual float PRFloatInRange(std::pair<float,float> r,int decimalLength)=0;
     virtual std::vector<float> CycleOne(bool floatgen, int max_size = 10000)=0;
+
 };
 
 class StdRandGenerator: public AbstractPRNG {
@@ -47,12 +43,14 @@ public:
     // range used for `CycleOne`.
     std::pair<float,float> pfr;
 
-    StdRandGenerator(int seed_number = RAND_MAX) : AbstractPRNG() {//int magic_number = RAND_MAX) {
+    StdRandGenerator(int seed_number = RAND_MAX,std::pair<float,float> pfr = 
+        std::make_pair(MIN_APRNG_VAR,MAX_APRNG_VAR)) : AbstractPRNG() {//int magic_number = RAND_MAX) {
         sn = seed_number;
 
         if (sn != RAND_MAX) {
             srand(sn); 
         }
+        this->pfr = pfr;
     };
 
     int PRIntInRange(std::pair<int,int> r);
@@ -170,34 +168,45 @@ public:
     // seed vector
     ivec iv;
     // arguments are (value,index)
-    std::function<bool (int,int)> f1;
+    std::function<bool (std::pair<int,int>,std::string)> f1;
     // argument is (selected values from `iv`)
-    std::function<int (ivec)> f2;
+    std::function<int (ivec,std::string)> f2;
+    std::string cmdf1;
+    std::string cmdf2;
+    int auto_empty;
 
-    ValueIndexStretchGenerator(ivec iv, std::function<bool (int,int)> f,std::function<int (ivec)> f2) {
+    ValueIndexStretchGenerator(ivec iv, std::function<bool (std::pair<int,int>,std::string)> f,
+        std::function<int (ivec,std::string)> f2, std::string cmdf1,
+        std::string cmdf2,int auto_empty = 0) {
+        assert(auto_empty >= 0);
         this->iv = iv;
         this->f1 = f1;
         this->f2 = f2;
+        this->cmdf1 = cmdf1;
+        this->cmdf2 = cmdf2;
+        this->auto_empty = auto_empty;
     }
 
-    virtual int PRIntInRange(std::pair<int,int> r)=0;
-    virtual float PRFloatInRange(std::pair<float,float> r,int decimalLength)=0;
+    static ValueIndexStretchGenerator FromString(std::string s);
+
+    int PRIntInRange(std::pair<int,int> r)=0;
+    float PRFloatInRange(std::pair<float,float> r,int decimalLength)=0;
     int DefaultPRIntInRange();
     float DefaultPRFloatInRange(int decimalLength);
-    virtual std::vector<float> CycleOne(bool floatgen, int max_size = 10000)=0;
+    std::vector<float> CycleOne(bool floatgen, int max_size = 10000)=0;
 
+    void Empty();
 
 };
 
+bool RelevantValueFunction1(std::pair<int,int> p,std::string command);
+int OutputValueFunction1(ivec iv,std::string command);
+
+/////////////////////////////
 
 AbstractPRNG* APRNGFromString(std::string s);
 std::string APRNGStringArgsDeltaScheme1(std::string astr,AbstractPRNG* aprng);
 std::string APRNGStringFromAPRNG(AbstractPRNG* aprng);
 std::vector<float> OutputSequenceByRanges(AbstractPRNG* aprng, 
     std::vector<std::pair<float,float>> vp,bool floatgen);
-
-
-
-///float APRNGSafeOutput(AbstractPRNG* aprng,std::pair<float,float> pr,std::set<float> restricted,bool floatgen);
-
 #endif

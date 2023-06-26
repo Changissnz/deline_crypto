@@ -207,10 +207,12 @@ void DInstSeq::ParseIntoDInst() {
 /// Saves the sequence generated. 
 void DInstSeq::Map(DMDTraveller* dt) {
     output.clear();// = (0,0,fill::zeros);
+    /*
     cout << "SEQ" << endl;
     cout << ToString() << endl;
     cout << "ENDSEQ" << endl;
-
+    */
+    
     int i = 0;
     // run all the one_apply
     for (auto oa: one_apply) {

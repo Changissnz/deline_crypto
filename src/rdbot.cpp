@@ -54,7 +54,7 @@ void Reactor::ReactOnTargets(DBot* db, RInst* ri) {
     //cout << "reacting on: " << endl;
     //cout << "reaction targets len: " << ri->reaction_targets.size() << endl; 
     for (auto rt: ri->reaction_targets) {
-        cout << "RT: " << rt << endl;
+        //cout << "RT: " << rt << endl;
         DInstSeq* dis = RTMODINSTR(db->dmdt, (db->mcd)[rt], ri->reaction_args[1]);
         db->mcd[rt] = dis;
     }

@@ -162,7 +162,6 @@ vector<pair<string,pair<int,int>>> SortSwapScoresType1(vector<pair<string,pair<i
         */
     });
 
-    cout << "DONESORT" << endl;
     return sv;
 }
 
@@ -599,7 +598,6 @@ pair<pair<string,string>,pair<int,int>> UTGSwapInstruction::RandomSwapOnNode(str
 
     // sort the swaps
     vps2 = SortSwapScoresType1(vps2);
-    cout << "CHOOSING BEST SWAP" << endl;
 
     // case: obj_best is false, reverse the vector
     if (!obj_best) {
@@ -622,16 +620,9 @@ pair<pair<string,string>,pair<int,int>> UTGSwapInstruction::RandomSwapOnNode(str
         }
     }
 
-    cout << "XXXX" << endl;
-
-
     // choose a random index in the range start_index, end_index
     int j = aprng->PRIntInRange(make_pair(start_index,end_index));
     pnrs = nd;
-
-    cout << "PNRS: " << pnrs << endl;
-    cout << "best swap is: " << nd << "," << 
-        vps2[j].first << endl;
     return make_pair(make_pair(nd,vps2[j].first),vps2[j].second);
 }
 

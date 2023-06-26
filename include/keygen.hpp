@@ -6,7 +6,6 @@
 #include "randumb.hpp"
 #include "gen_struct.hpp"
 
-static std::vector<std::string> STD_ARITHMETIC_OPS = {"+","-","*","/"};
 
 /// CAUTION: using this key with APRNG instances that "score poorly" on
 ///          variance tests might result in erroneous outcomes.

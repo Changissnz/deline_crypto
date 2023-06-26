@@ -56,8 +56,14 @@ void RInst::Parse_() {
         assert(possible_conds.find(vs[1]) != possible_conds.end());
         c2 = vs[1];
     } else {
-        assert(vs.size() == 2);
-        c2 = vs[1];
+        // special case: SPACE 
+        if (vs.size() < 2) {
+            c2 = " ";
+        } else {
+            assert(vs.size() == 2);
+            c2 = vs[1];
+        }
+
         vs = SplitStringToVector(inf[1], " ");
         assert(vs.size() == 4);
         assert((vs[0] == "IF") && (vs[1] == "COND") && (vs[3] == "W/"));

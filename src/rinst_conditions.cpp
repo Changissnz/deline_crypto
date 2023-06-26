@@ -288,9 +288,7 @@ bool C6__BOOLEAN_DELTA_MEASURE_ALONG_AXIS(DMDTraveller* dmdt,DInstSeq* di,string
     char d = *(vs[0].c_str());
     bool f1 = stoi(vs[1]);
     float f2 = stof(vs[2]);
-    cout << "getting boolean delta" << endl;
     float vi = C6__BOOLEAN_DELTA_MEASURE_ALONG_AXIS(dmdt,di,d);
-    cout << "GOT IT" <<  endl;
     if (f1) {
         return (vi >= f2);
     }

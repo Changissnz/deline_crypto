@@ -47,8 +47,6 @@ vector<float> StdRandGenerator::CycleOne(bool floatgen,int max_size) {
     bool stat = true;
     float i;
 
-    cout << "PFR: " << pfr.first << " " << pfr.second << endl;
-
     if (!floatgen) {
         i = float(PRIntInRange(make_pair(pfr.first,pfr.second)));
     } else {
@@ -409,13 +407,13 @@ int ValueIndexStretchGenerator::DefaultPRIntInRange() {
 
     // iterate through and collect the
     for (int i = 0; i < iv.size();i++) {
-        if (f1(iv(i),i)) {
+        if (f1(make_pair(iv(i),i),cmdf1)) {
             vi.push_back(iv(i));
         }
         vi2.push_back(iv(i));
     }
 
-    int v = f2(conv_to<ivec>::from(vi));
+    int v = f2(conv_to<ivec>::from(vi),cmdf2);
     vi2.push_back(v);
     iv = conv_to<ivec>::from(vi2); 
     return v;
@@ -441,6 +439,51 @@ float ValueIndexStretchGenerator::DefaultPRFloatInRange(int decimalLength) {
 
     return RoundDecimalNPlaces(stof(to_string(di) + "." + s),decimalLength);
 }
+
+//////////////////////
+
+/// used by the class <ValueIndexStretchGenerator>
+/// 
+/// *format of command*
+///     operator,modulo,modulo_range
+bool RelevantValueFunction1(pair<int,int> p,string command) {
+    vector<string> vs = SplitStringToVector(command,",");
+    assert(vs.size() == 3);
+    int i2 = stoi(vs[1]);
+    
+    vector<string> vs2 = SplitStringToVector(vs[2],"_");
+    assert(vs2.size() == 2);
+    int i3 = stoi(vs2[0]);
+    int i4 = stoi(vs2[1]);
+    assert(i3 <= i4);
+
+    set<string> sao(STD_ARITHMETIC_OPS.begin(),STD_ARITHMETIC_OPS.end());
+    assert(sao.find(vs[0]) != sao.end()); 
+
+    int i5 = ArithmeticOp(p.first,p.second,vs[0]); 
+    i5 = abs(i5) % i2;
+    return (i5 >= i3 && i5 <= i4);
+}
+
+/// used by the class <ValueIndexStretchGenerator>
+/// 
+/// *format of command*
+///     operator_sequence,modulo
+int OutputValueFunction1(ivec iv,string command) {
+    if (iv.size() == 0) {
+        return 0.;
+    }
+
+    float f = float(iv(0));
+    int j = iv.size();
+    int z = 0;
+    for (int i = 0; i < j; i++) {
+        string c2 = command.substr(z,1);
+        f = ArithmeticOp(f,float(iv(i)),c2);
+        z = (z + 1) % command.size();
+    }
+    return int(round(f));
+} 
 
 
 /// string is a space-separated sequence. Some examples are
@@ -554,8 +597,6 @@ string APRNGStringFromAPRNG(AbstractPRNG* aprng) {
         sx += to_string(aprng->PRIntInRange(make_pair(MIN_APRNG_VAR,MAX_APRNG_VAR))) + " ";
     }
     sx = sx.substr(0,sx.size() - 1);
-    cout << "NEW APRNG" << endl;
-    cout << sx << endl;
     return sx;
 }
 

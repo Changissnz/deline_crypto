@@ -7,12 +7,6 @@ float POINT_RADIUS_RATIO = 0.005;
 float CoverageOfSequence(vec vf, std::pair<float,float> fr,float pr) {
     assert (fr.second > fr.first);
     vector<pair<float,float>> vpf = NonIntersectingActivationRangesOfPointSequence(vf,fr,pr);
-    
-    cout << "non-intersecting ranges: " << endl;
-    for (auto vpf_: vpf) {
-        cout << vpf_.first << " " << vpf_.second << endl;
-    }
-    cout << "--------" << endl;
     float fx = 0;
 
     for (auto vpf_: vpf) {
@@ -36,16 +30,12 @@ vector<pair<float,float>> NonIntersectingActivationRangesOfPointSequence(vec vf,
     vector<pair<float,float>> vfx;
     pair<float,float> bs;
     vf = unique(vf);
-    cout << "unique" << endl;
 
     for (auto vf_: vf) {
         vec f1 = {vf_ - pr,fr.first};
         vec f2 = {vf_ + pr,fr.second};
         bs = make_pair(f1.max(),f2.min());
-        cout << "next: " << vf_ << endl;
         
-        ///bs.first << "|" << bs.second << endl;
-
         // check for intersection w/ the previous
         if (vfx.size() > 0) {
             bs = CorrectIntersectingRanges(vfx[vfx.size() - 1],bs);
@@ -97,18 +87,11 @@ vector<pair<float,float>> NonIntersectingActivationRangesOfPointSequence(vec vf,
 ///
 /// CAUTION: method designed for use w/ `NonIntersectingActivationRangesOfPointSequence`.
 pair<float,float> CorrectIntersectingRanges(pair<float,float> f1,pair<float,float> f2) {
-    cout << "correcting: " << endl;
-    cout << "\tF1: " << f1.first << "|" << f1.second << endl;
-    cout << "\tF2: " << f2.first << "|" << f2.second << endl;
-
     if (f2.first >= f1.first && f2.first <= f1.second) {
         f2.first = f1.second;
     } else if (f2.first < f1.first) {
         f2.first = f1.second; 
     }
-
-    cout << "\tF2_: " << f2.first << "|" << f2.second << endl;
-
 
     return f2;
 }

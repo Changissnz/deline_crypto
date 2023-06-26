@@ -54,24 +54,35 @@ void PERMUTEDINST(DInstSeq* di, AbstractPRNG* aprng) {
     // permute the `one_apply` 
     PermLCG* plcg = new PermLCG(vi[0],vi[1],vi[2],vi[3]);
     int sz1 = di->one_apply.size(); 
-    plcg->SetRangeData(make_pair(int(0),sz1 - 1));
-    vector<float> vi1 = plcg->CycleOne(false,sz1);
-    vector<DInst*> vd1;
-    for (auto vi1_: vi1) {
-        vd1.push_back(di->one_apply[int(vi1_)]);
-    }
-    di->one_apply = vd1;
 
-    // permute the `all_apply`
+        // case: only one
+    pair<int,int> pi1 = make_pair(int(0),sz1 - 1);
+    if (pi1.second > 0) {
+        plcg->SetRangeData(pi1);
+        vector<float> vi1 = plcg->CycleOne(false,sz1);
+        vector<DInst*> vd1;
+        for (auto vi1_: vi1) {
+            vd1.push_back(di->one_apply[int(vi1_)]);
+        }
+        di->one_apply = vd1;
+    }
+
+    // permute the `all_apply`    
     PermLCG* plcg2 = new PermLCG(vi[0],vi[1],vi[2],vi[3]);
     int sz2 = di->all_apply.size(); 
-    plcg2->SetRangeData(make_pair(0,sz2 - 1));
-    vector<float> vi2 = plcg2->CycleOne(false,sz2);
-    vector<DInst*> vd2;
-    for (auto vi2_: vi2) {
-        vd2.push_back(di->all_apply[int(vi2_)]);
+
+        // case: only one
+
+    pair<int,int> pi2 = make_pair(int(0),sz2 - 1);
+    if (pi2.second > 0) {
+        plcg2->SetRangeData(make_pair(0,sz2 - 1));
+        vector<float> vi2 = plcg2->CycleOne(false,sz2);
+        vector<DInst*> vd2;
+        for (auto vi2_: vi2) {
+            vd2.push_back(di->all_apply[int(vi2_)]);
+        }
+        di->all_apply = vd2;
     }
-    di->all_apply = vd2;
 }
 
 /// applies the MODIFY scheme to the contents of one DInst*
@@ -264,36 +275,11 @@ void MODIFY_TYPEBG(DMDTraveller* dt,DInst* dx, AbstractPRNG* aprng) {
 /// *see the comment for `MODIFYDINST` for information on the aprng limits
 ///  for each var<ins>*
 void MODIFY_TYPEHOP(DMDTraveller* dt,DInst* dx, AbstractPRNG* aprng) {
-
-    // modify the indices
-    /*
-    pair<int,map<int,int>> pim = dt->Info();
-    cout << "HOP1" << endl;
-
-        // modify the index
-    int i1 = aprng->PRIntInRange(make_pair(1,pim.first));
-    i1 = (i1 + stoi(dx->inst_args[0])) % pim.first;
-    dx->inst_args[0] = to_string(i1);
-
-    cout << "HOP2" << endl;
-
-        // modify the next index
-    cout << "PIM.SECOND: " << pim.second[i1] << endl;
-    int i2 = aprng->PRIntInRange(make_pair(1,pim.second[i1]));
-    i2 = (i2 + stoi(dx->inst_args[1])) % pim.second[i1];
-    dx->inst_args[1] = to_string(i2);
-    */
-    ////////////////////
     pair<int,int> pi = DMDIndicesFromAPRNG(dt,aprng);
     dx->inst_args[0] = to_string(pi.first);
     dx->inst_args[1] = to_string(pi.second);
 
-    cout << "HOP3" << endl;
-    cout << "[0]" << dx->inst_args[0] << endl;
-    cout << "[1]" << dx->inst_args[1] << endl;
-
     // modify the aprng string
-    cout << "MOD APRNG" << endl;
     dx->inst_args[2] = APRNGStringArgsDeltaScheme1(dx->inst_args[2],aprng);
 }
 
@@ -401,6 +387,5 @@ pair<int,int> DMDIndicesFromAPRNG(DMDTraveller* dt, AbstractPRNG* aprng) {
     int i1 = aprng->PRIntInRange(make_pair(0,pim.first - 1));
     i1 = vi[i1];
     int i2 = aprng->PRIntInRange(make_pair(0,pim.second[i1] - 1));
-    cout << "numbersbefore: " << i1 << " " << i2 << endl;
     return make_pair(i1,i2);
 }

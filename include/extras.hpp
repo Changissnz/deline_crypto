@@ -10,6 +10,7 @@
 #include <armadillo>
 using namespace arma;
 
+static std::vector<std::string> STD_ARITHMETIC_OPS = {"+","-","*","/"};
 static std::vector<std::string> STD_NAVDIR = {"l","r","t","d"};
 
 float RoundDecimalNPlaces(float x,int d);
@@ -115,5 +116,26 @@ mat IndiceRangeToSubArmaMat(mat m, std::pair<int,int> irnge);
 mat IndiceRangeToPalindromicSubArmaMat(mat m, std::pair<int,int> irnge);
 
 ivec IndiceRangeToPalindromicIndices(std::pair<int,int> irnge);
+
+/// T is an ordered iterable containing numeric types
+template<typename T>
+float ArithmeticOp(const T& t1,const T& t2,std::string sx) {
+  std::set<std::string> aop(STD_ARITHMETIC_OPS.begin(),STD_ARITHMETIC_OPS.end());
+  assert(aop.find(sx) != aop.end());
+
+  if (sx == "+") {
+    return t1 + t2;
+  }
+
+  if (sx == "-") {
+    return t1 - t2; 
+  }
+
+  if (sx == "*") {
+    return t1 * t2;
+  }
+
+  return (t2 == 0) ? 0.: t1 / t2;
+}
 
 #endif
