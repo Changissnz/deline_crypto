@@ -180,7 +180,7 @@ public:
         std::string cmdf2,int auto_empty = 0) {
         assert(auto_empty >= 0);
         this->iv = iv;
-        this->f1 = f1;
+        this->f1 = f;
         this->f2 = f2;
         this->cmdf1 = cmdf1;
         this->cmdf2 = cmdf2;
@@ -189,11 +189,11 @@ public:
 
     static ValueIndexStretchGenerator FromString(std::string s);
 
-    int PRIntInRange(std::pair<int,int> r)=0;
-    float PRFloatInRange(std::pair<float,float> r,int decimalLength)=0;
+    int PRIntInRange(std::pair<int,int> r);
+    float PRFloatInRange(std::pair<float,float> r,int decimalLength);
     int DefaultPRIntInRange();
     float DefaultPRFloatInRange(int decimalLength);
-    std::vector<float> CycleOne(bool floatgen, int max_size = 10000)=0;
+    std::vector<float> CycleOne(bool floatgen, int max_size = 10000);
 
     void Empty();
 

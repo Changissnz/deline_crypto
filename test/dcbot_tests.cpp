@@ -43,5 +43,4 @@ TEST(DCBot__Code__Case2_DemoTest, DCBot__Code__Case2_DemoTestCorrect) {
     DCBot* dcb = new DCBot(ifp,rfp,dfp,difp,utgfp,STD_NODE_LIST,inputf,make_pair(outputf,outputf2));
     dcb->Code();
     dcb->Terminate();
-
 }

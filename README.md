@@ -24,3 +24,7 @@ project at
 - type in `gen_t5()` for `t5.csv`.
 - transfer those two files to the folder
     `deline_crypto/src/data`.
+
+# Update 6/27
+Further developments on project have been stalled.
+Encoding procedure works.

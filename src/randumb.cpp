@@ -407,15 +407,27 @@ int ValueIndexStretchGenerator::DefaultPRIntInRange() {
 
     // iterate through and collect the
     for (int i = 0; i < iv.size();i++) {
-        if (f1(make_pair(iv(i),i),cmdf1)) {
+        ///cout << "- [" << i << "]" << " " << endl;
+        pair<int,int> px = make_pair(iv(i),i);
+        bool b1 = f1(px,cmdf1);
+        if (b1) {
             vi.push_back(iv(i));
         }
         vi2.push_back(iv(i));
     }
 
+    cout << "relevant: " << conv_to<ivec>::from(vi) << endl;
     int v = f2(conv_to<ivec>::from(vi),cmdf2);
+    cout << "output: " << v << endl;
     vi2.push_back(v);
-    iv = conv_to<ivec>::from(vi2); 
+
+    if (auto_empty > 0) {
+        vi2.erase(vi2.begin(),vi2.begin() + auto_empty);
+    }
+
+    iv = conv_to<ivec>::from(vi2);
+    ///cout << "IV: " << iv << endl;
+
     return v;
 }
 
@@ -440,6 +452,46 @@ float ValueIndexStretchGenerator::DefaultPRFloatInRange(int decimalLength) {
     return RoundDecimalNPlaces(stof(to_string(di) + "." + s),decimalLength);
 }
 
+vector<float> ValueIndexStretchGenerator::CycleOne(bool floatgen, int max_size) {
+    vector<float> vi;
+    bool stat = true;
+    float i;
+
+    // get the first value so that first value `fi` or `ff` is
+    // set
+    
+    ///cout << "[0] " << endl;
+    float s;
+    if (!floatgen) {
+        i = float(DefaultPRIntInRange());
+    } else {
+        i = DefaultPRFloatInRange(5);
+    }
+    s = i;
+    vi.push_back(i);
+
+    // continually loop through 
+    int j = 1;
+    while (stat && j < max_size) {
+        int k = i;
+        if (!floatgen) {
+            i = float(DefaultPRIntInRange());
+        } else {
+            i = DefaultPRFloatInRange(5);
+        }
+
+        stat = (i != s);// && (i != k);
+        if (stat) {
+            vi.push_back(i);
+        }
+
+        j += 1;
+    }
+
+    return vi;
+}
+
+
 //////////////////////
 
 /// used by the class <ValueIndexStretchGenerator>
@@ -447,6 +499,7 @@ float ValueIndexStretchGenerator::DefaultPRFloatInRange(int decimalLength) {
 /// *format of command*
 ///     operator,modulo,modulo_range
 bool RelevantValueFunction1(pair<int,int> p,string command) {
+    ///cout << "command: " << command << endl;
     vector<string> vs = SplitStringToVector(command,",");
     assert(vs.size() == 3);
     int i2 = stoi(vs[1]);
@@ -460,6 +513,9 @@ bool RelevantValueFunction1(pair<int,int> p,string command) {
     set<string> sao(STD_ARITHMETIC_OPS.begin(),STD_ARITHMETIC_OPS.end());
     assert(sao.find(vs[0]) != sao.end()); 
 
+    ///cout << "arithmetic op: " << p.first << "|" <<
+    ///    p.second << endl;
+
     int i5 = ArithmeticOp(p.first,p.second,vs[0]); 
     i5 = abs(i5) % i2;
     return (i5 >= i3 && i5 <= i4);
@@ -470,6 +526,8 @@ bool RelevantValueFunction1(pair<int,int> p,string command) {
 /// *format of command*
 ///     operator_sequence,modulo
 int OutputValueFunction1(ivec iv,string command) {
+    vector<string> vs = SplitStringToVector(command,",");
+
     if (iv.size() == 0) {
         return 0.;
     }
@@ -477,12 +535,13 @@ int OutputValueFunction1(ivec iv,string command) {
     float f = float(iv(0));
     int j = iv.size();
     int z = 0;
-    for (int i = 0; i < j; i++) {
-        string c2 = command.substr(z,1);
+    for (int i = 1; i < j; i++) {
+        string c2 = vs[0].substr(z,1);
         f = ArithmeticOp(f,float(iv(i)),c2);
-        z = (z + 1) % command.size();
+        z = (z + 1) % vs[0].size();
     }
-    return int(round(f));
+    cout << "output: " << abs(f) << endl;
+    return int(round(abs(f))) % stoi(vs[1]);
 } 
 
 
