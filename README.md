@@ -25,6 +25,6 @@ project at
 - transfer those two files to the folder
     `deline_crypto/src/data`.
 
-# Update 6/27
+# Update 6/27/23
 Further developments on project have been stalled.
 Encoding procedure works.
