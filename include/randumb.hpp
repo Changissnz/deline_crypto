@@ -174,17 +174,21 @@ public:
     std::string cmdf1;
     std::string cmdf2;
     int auto_empty;
+    float neg_contra_rate;
 
     ValueIndexStretchGenerator(ivec iv, std::function<bool (std::pair<int,int>,std::string)> f,
         std::function<int (ivec,std::string)> f2, std::string cmdf1,
-        std::string cmdf2,int auto_empty = 0) {
+        std::string cmdf2,int auto_empty = 0,float neg_contra_rate = 0.) {
         assert(auto_empty >= 0);
+        assert(neg_contra_rate >= 0. && neg_contra_rate <= 1.);
+
         this->iv = iv;
         this->f1 = f;
         this->f2 = f2;
         this->cmdf1 = cmdf1;
         this->cmdf2 = cmdf2;
         this->auto_empty = auto_empty;
+        this->neg_contra_rate = neg_contra_rate;
     }
 
     static ValueIndexStretchGenerator FromString(std::string s);

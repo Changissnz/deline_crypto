@@ -177,8 +177,9 @@ pair<pair<mat,int>,pair<string,string>> DBot::OneChar(string c) {
     pair<DInstSeq*,string> dism = CharToInstr(c);
     
     // calculate the output
+    ///cout << "mapping" << endl;
     (dism.first)->Map(dmdt);
-    
+    ///cout << "get sequence" << endl;
     mat m = ((dism.first)->MOsequence(dmdt)).first;
     int j = CharToInt(dism.second);
     pair<mat,int> sol = make_pair(m,j);

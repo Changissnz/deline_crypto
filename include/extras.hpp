@@ -11,7 +11,7 @@
 using namespace arma;
 
 static std::vector<std::string> STD_ARITHMETIC_OPS = {"+","-","*","/"};
-static std::vector<std::string> STD_NAVDIR = {"l","r","t","d"};
+static std::vector<std::string> STD_NAVDIR = {"l","r","t","b"};
 
 float RoundDecimalNPlaces(float x,int d);
 bool FloatEquals(float f,float f2,int d); 

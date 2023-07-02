@@ -5,7 +5,7 @@ using namespace std;
 pair<char,int> IncrementNextIndexInEdges(vector<pair<char,int>>* mx, vector<int> szs, char direction) {
 
     // get the index of direction
-    int qi;
+    int qi = 0;
     for (int i =0; i < (*mx).size(); i++) {
         if ((*mx)[i].first == direction) {
             qi = i;
@@ -13,12 +13,12 @@ pair<char,int> IncrementNextIndexInEdges(vector<pair<char,int>>* mx, vector<int>
         }
     }
 
+    ///assert(qi != -1);
     if (szs[qi] == 0) {
         return (*mx)[qi];
     } 
 
-    (*mx)[qi].second = ((*mx)[qi].second + 1) % szs[qi]; 
-    
+    (*mx)[qi].second = ((*mx)[qi].second + 1) % szs[qi];     
     return (*mx)[qi];
 }
 
@@ -311,9 +311,9 @@ mat DMDTraveller::SelectPointsByReference(Deline22* d22, int index, vector<char>
     pair<char,int> j;
     rowvec rx;
     for (auto d_: directions) {
+
         j = IncrementNextIndexInEdges(&mx,szs,d_);
         int szr = (d22->del->Edge(j.first)).n_rows;
-
         // 0-case: if edge does not exist 
         rowvec rq;
         if (szr == 0) {
@@ -321,10 +321,8 @@ mat DMDTraveller::SelectPointsByReference(Deline22* d22, int index, vector<char>
         } else {
             rq = ((d22->del)->Edge(j.first)).row(j.second);
         }
-
         mxx.insert_rows(mxx.n_rows,rq);
     }
-
     mxx.shed_col(2);
     return mxx;
     

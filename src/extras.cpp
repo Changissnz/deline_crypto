@@ -181,7 +181,7 @@ int NavDirToInt(char cx) {
         return 2;
     }
 
-    if (cx == 'd') {
+    if (cx == 'b') {
         return 3;
     }
 

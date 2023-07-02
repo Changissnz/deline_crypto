@@ -406,14 +406,22 @@ int ValueIndexStretchGenerator::DefaultPRIntInRange() {
     vector<int> vi2;
 
     // iterate through and collect the
+    vector<int> neg_indices;
     for (int i = 0; i < iv.size();i++) {
         ///cout << "- [" << i << "]" << " " << endl;
         pair<int,int> px = make_pair(iv(i),i);
         bool b1 = f1(px,cmdf1);
         if (b1) {
             vi.push_back(iv(i));
+        } else {
+            neg_indices.push_back(i);
         }
         vi2.push_back(iv(i));
+    }
+
+    int contraneg = int(round(neg_indices.size() * neg_contra_rate));
+    for (int i = 0; i < contraneg;i++) {
+        vi.push_back(iv(neg_indices[i]));
     }
 
     cout << "relevant: " << conv_to<ivec>::from(vi) << endl;
@@ -540,10 +548,21 @@ int OutputValueFunction1(ivec iv,string command) {
         f = ArithmeticOp(f,float(iv(i)),c2);
         z = (z + 1) % vs[0].size();
     }
-    cout << "output: " << abs(f) << endl;
-    return int(round(abs(f))) % stoi(vs[1]);
-} 
+    cout << "F: " << f << " " << abs(f) << endl;
+    cout << "VS1: " << vs[1] << endl;
+    int k = int(round(abs(f))) % stoi(vs[1]);
+    cout << "K: " << k << endl;
+    return abs(int(round(abs(f))) % stoi(vs[1]));
+}
 
+////////////////////////////////////////////////////
+
+/// output value function that stringizes values, and combines
+/// them to make new ones.
+
+
+
+/////////////////////////////////////////////////////
 
 /// string is a space-separated sequence. Some examples are
 /// form (1):
