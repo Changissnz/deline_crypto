@@ -28,3 +28,7 @@ project at
 # Update 6/27/23
 Further developments on project have been stalled.
 Encoding procedure works.
+
+# Update 8/12/23
+First draft of paper on `deline_crypto` published 
+to project. See `dc_paper.pdf`. 
