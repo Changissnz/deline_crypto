@@ -8,9 +8,7 @@ Depending on usage, the encoding can be considered as
 cryptographic.
 
 # More info
-User instructions and a paper are to be published by 
-me w/in these next few months that details the 
-capabilities and deficits of this system.
+See `dc_paper.pdf`. 
 
 # Test datasets
 For the test datasets `t4.csv` and `t5.csv` that are required
