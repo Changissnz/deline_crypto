@@ -30,3 +30,6 @@ Encoding procedure works.
 # Update 8/12/23
 First draft of paper on `deline_crypto` published 
 to project. See `dc_paper.pdf`. 
+
+# Update 8/14/23
+Finalized draft `dc_paper.pdf`.
